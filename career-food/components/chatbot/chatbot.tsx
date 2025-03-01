@@ -981,11 +981,12 @@ export default function PersonalityQuiz() {
   return (
     <div className="relative min-w-96 max-w-sm">
       {showNotification && (
-        <div className="bg-black text-white rounded-3xl p-6 mx-auto w-full max-w-sm overflow-hidden text-sm flex flex-col h-[700px]">
-          <div className="text-center mb-auto ">{currentDate}</div>
+        <div className="bg-black dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full max-w-sm overflow-hidden text-sm flex flex-col h-[700px]">
+          <div className="text-center mb-auto font-bold text-xl py-4">
+            👷 Career Finder
+          </div>
 
           <div className="bg-gray-200 text-black rounded-sm py-4 px-6 mb-4  text-center">
-            <p className="font-bold text-lg">*Personality Quiz*</p>
             <p>
               Answer a few questions and find out your MBTI personality type,
               ideal career path, and Ramadhan food soulmate.
@@ -1009,9 +1010,10 @@ export default function PersonalityQuiz() {
       )}
 
       {showChat && (
-        <div className="bg-black text-white rounded-3xl p-6 mx-auto w-full max-w-sm overflow-hidden flex flex-col h-[700px]">
-          <div className="text-center mb-4 ">{currentDate}</div>
-
+        <div className="bg-black dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full max-w-sm overflow-hidden flex flex-col h-[700px]">
+          <div className="text-center mb-auto font-bold text-xl py-4">
+            👷 Career Finder
+          </div>
           <div className="flex-1 overflow-y-auto mb-4 space-y-4">
             {messages.map((message) => (
               <div key={message.id} className="space-y-2">

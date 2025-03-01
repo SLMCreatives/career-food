@@ -3,9 +3,8 @@ import NotificationChatbot from "@/components/chatbot/chatbot";
 export default async function Home() {
   return (
     <>
-      <main className="flex-1 flex flex-col items-center justify-center gap-6 px-4">
+      <main className="flex-1 flex flex-col -mt-16 items-center justify-center gap-6 px-4">
         <NotificationChatbot />
-       
       </main>
     </>
   );

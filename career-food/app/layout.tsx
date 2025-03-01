@@ -52,7 +52,7 @@ export default function RootLayout({
               </nav>
               <div className="flex flex-col gap-20 w-full p-0">{children}</div>
 
-              <footer className="w-full flex flex-col items-center justify-center border-t mx-auto text-center text-xs gap-0 py-2">
+              {/* <footer className="w-full flex flex-col items-center justify-center border-t mx-auto text-center text-xs gap-0 py-2">
                 <p>
                   Powered by{" "}
                   <a
@@ -65,7 +65,7 @@ export default function RootLayout({
                   </a>
                   © 2025
                 </p>
-              </footer>
+              </footer> */}
             </div>
           </main>
         </ThemeProvider>
