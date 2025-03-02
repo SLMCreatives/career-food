@@ -36,6 +36,7 @@ export type QuizAnswers = {
 export default function PersonalityQuiz() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [name, setName] = useState("");
   const [showNotification, setShowNotification] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
@@ -44,6 +45,7 @@ export default function PersonalityQuiz() {
     personality: { ei: "", sn: "", tf: "", jp: "" },
     career: { environment: "", passion: "", strength: "", industry: "" }
   });
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,11 +62,6 @@ export default function PersonalityQuiz() {
     }
   }, [messages]);
 
-  /*  useEffect(() => {
-    // Scroll to bottom when messages change
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messagesEndRef]); //Corrected dependency */
-
   useEffect(() => {
     // Start the quiz when chat is opened
     if (showChat) {
@@ -73,10 +70,20 @@ export default function PersonalityQuiz() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showChat]);
 
+  const preQuiz = () => {
+    const preQuizMessage: Message = {
+      id: Date.now(),
+      text: "👋 Hello! I'm your friendly CareerBot. What's your name?",
+      sender: "bot"
+    };
+    startQuiz();
+    setMessages([preQuizMessage]);
+  };
+
   const startQuiz = () => {
     const introMessage: Message = {
       id: Date.now(),
-      text: "Welcome to the most important quiz of your life! (Okay, maybe not the most important, but close enough.)\n\nLet's figure out your personality, ideal career, and—most importantly—the Ramadhan food that defines your soul.\n\nAll you have to do is pick an answer. Easy, right?",
+      text: `Welcome ${name} to the most important quiz of your life! (Okay, maybe not the most important, but close enough.)\n\nLet's figure out your personality, ideal career, and—most importantly—the Ramadhan food that defines your soul.\n\nAll you have to do is pick an answer. Easy, right?`,
       sender: "bot",
       options: [
         {
@@ -114,7 +121,7 @@ export default function PersonalityQuiz() {
     setQuizStage("ei");
     const eiQuestion: Message = {
       id: Date.now(),
-      text: "It's the weekend. No school, no exams, no stress (unless your mom suddenly remembers you exist and assigns house chores).\n\nWhat's the plan?",
+      text: `Question 1. \n\n It's the weekend. No school, no exams, no stress (unless your mom suddenly remembers you exist and assigns house chores).\n\nWhat's the plan ${name}?`,
       sender: "bot",
       options: [
         {
@@ -295,25 +302,25 @@ export default function PersonalityQuiz() {
         ...prev,
         personality: { ...prev.personality, ei: value }
       }));
-      setTimeout(() => askSensingIntuitionQuestion(), 1000);
+      setTimeout(() => askSensingIntuitionQuestion(), 2000);
     } else if (category === "sn") {
       setQuizAnswers((prev) => ({
         ...prev,
         personality: { ...prev.personality, sn: value }
       }));
-      setTimeout(() => askThinkingFeelingQuestion(), 1000);
+      setTimeout(() => askThinkingFeelingQuestion(), 2000);
     } else if (category === "tf") {
       setQuizAnswers((prev) => ({
         ...prev,
         personality: { ...prev.personality, tf: value }
       }));
-      setTimeout(() => askJudgingPerceivingQuestion(), 1000);
+      setTimeout(() => askJudgingPerceivingQuestion(), 2000);
     } else if (category === "jp") {
       setQuizAnswers((prev) => ({
         ...prev,
         personality: { ...prev.personality, jp: value }
       }));
-      setTimeout(() => askWorkEnvironmentQuestion(), 1000);
+      setTimeout(() => askWorkEnvironmentQuestion(), 2000);
     }
   };
 
@@ -628,25 +635,25 @@ export default function PersonalityQuiz() {
         ...prev,
         career: { ...prev.career, environment: value }
       }));
-      setTimeout(() => askPassionQuestion(), 1000);
+      setTimeout(() => askPassionQuestion(), 2000);
     } else if (category === "passion") {
       setQuizAnswers((prev) => ({
         ...prev,
         career: { ...prev.career, passion: value }
       }));
-      setTimeout(() => askStrengthQuestion(), 1000);
+      setTimeout(() => askStrengthQuestion(), 2000);
     } else if (category === "strength") {
       setQuizAnswers((prev) => ({
         ...prev,
         career: { ...prev.career, strength: value }
       }));
-      setTimeout(() => askIndustryQuestion(), 1000);
+      setTimeout(() => askIndustryQuestion(), 2000);
     } else if (category === "industry") {
       setQuizAnswers((prev) => ({
         ...prev,
         career: { ...prev.career, industry: value }
       }));
-      setTimeout(() => showResults(), 1000);
+      setTimeout(() => showResults(), 2000);
     }
   };
 
@@ -775,7 +782,7 @@ export default function PersonalityQuiz() {
 
     const resultsMessage: Message = {
       id: Date.now(),
-      text: `🎉 Results are in! 🎉\n\n🧠 Your MBTI Personality Type: ${mbtiType}\n\n💼 Your Ideal Career Path: ${careerPath}\n\n🍽️ Your Ramadhan Food Soul Match: ${ramadhanFood}\n\nWant to take the quiz again?`,
+      text: `🎉 Results are in! 🎉\n\n🧠 Your MBTI Personality Type: ${mbtiType}\n\n💼 Your Ideal Career Path: ${careerPath}\n\n🍽️ Your Ramadhan Food Soul Match: ${ramadhanFood}\n\nWant to know which course you should take?`,
       sender: "bot",
       options: [
         {
@@ -793,6 +800,17 @@ export default function PersonalityQuiz() {
               }
             });
             startQuiz();
+          }
+        },
+        {
+          text: "Share with friends",
+          value: "share",
+          action: () => {
+            navigator.share({
+              title: "CareerFood",
+              text: "Check out CareerFood! A fun quiz to find your ideal career and Ramadhan food.",
+              url: window.location.href
+            });
           }
         }
       ]
@@ -965,7 +983,7 @@ export default function PersonalityQuiz() {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      handleSendMessage();
+      handleOpenChat();
     }
   };
 
@@ -979,39 +997,63 @@ export default function PersonalityQuiz() {
   };
 
   return (
-    <div className="relative min-w-96 max-w-sm">
+    <div className="relative min-w-96 max-w-xl">
       {showNotification && (
-        <div className="bg-black dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full max-w-sm overflow-hidden text-sm flex flex-col h-[700px]">
-          <div className="text-center mb-auto font-bold text-xl py-4">
+        <div className="bg-black border-2 border-stone-950 shadow-lg dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden text-sm flex flex-col h-[700px]">
+          <div className="text-center mb-auto font-bold text-xl pb-4">
             👷 Career Finder
           </div>
 
-          <div className="bg-gray-200 text-black rounded-sm py-4 px-6 mb-4  text-center">
+          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
+            <p>
+              In todays fast-paced world, finding the perfect career path can be
+              a daunting task. That is where our career finder comes in!
+            </p>
+          </div>
+          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
             <p>
               Answer a few questions and find out your MBTI personality type,
               ideal career path, and Ramadhan food soulmate.
             </p>
           </div>
+          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
+            <p>
+              This is a fun way to determine which career would suit your best
+              and how to get there.
+            </p>
+          </div>
+          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
+            <p>To start the quiz, just type your name and click send!</p>
+          </div>
 
-          <button
+          {/* <button
             onClick={handleOpenChat}
             className="bg-pink-200 text-black rounded-full py-3 px-6 mb-3 hover:font-bold hover:bg-pink-400 transition-colors duration-300 ease-in-out"
           >
             *Start Quiz*
-          </button>
-
-          <button
-            onClick={handleIgnore}
-            className="bg-pink-200 text-black rounded-full py-3 px-6 mb-3 hover:font-bold hover:bg-pink-100 transition-colors duration-300 ease-in-out"
-          >
-            *Exit*
-          </button>
+          </button> */}
+          <div className="flex items-center w-full">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter your name to begin quiz"
+              className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none w-3/4"
+            />
+            <button
+              onClick={handleOpenChat}
+              className="bg-pink-200 text-black rounded-full p-3"
+            >
+              <Send size={16} />
+            </button>
+          </div>
         </div>
       )}
 
       {showChat && (
-        <div className="bg-black dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full max-w-sm overflow-hidden flex flex-col h-[700px]">
-          <div className="text-center mb-auto font-bold text-xl py-4">
+        <div className="bg-black dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[700px]">
+          <div className="text-center mb-auto font-bold text-xl pb-4">
             👷 Career Finder
           </div>
           <div className="flex-1 overflow-y-auto mb-4 space-y-4">
@@ -1020,19 +1062,19 @@ export default function PersonalityQuiz() {
                 <div
                   className={`${
                     message.sender === "user"
-                      ? "bg-pink-200 text-black ml-auto"
-                      : "bg-gray-200 text-black mr-auto"
-                  } rounded-sm py-3 px-6 max-w-[80%]  whitespace-pre-wrap`}
+                      ? "bg-emerald-200 text-black ml-12 text-right"
+                      : "bg-gray-200 text-black mr-12"
+                  } rounded-md py-3 px-4 text-md whitespace-pre-wrap text-pretty`}
                 >
                   {message.text}
                 </div>
                 {message.options && (
-                  <div className="flex flex-col space-y-2 mt-2">
+                  <div className="flex flex-col items-end justify-center gap-4 py-6">
                     {message.options.map((option) => (
                       <button
                         key={option.value}
                         onClick={option.action}
-                        className="bg-pink-200 text-black rounded-sm py-2 px-4  text-sm text-left hover:bg-pink-300 transition-colors"
+                        className="bg-pink-200 text-black rounded-full py-3 px-4 text-sm text-right hover:bg-pink-400 transition-colors"
                       >
                         {option.text}
                       </button>
@@ -1044,14 +1086,15 @@ export default function PersonalityQuiz() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* <div className="flex items-center">
+          <div className="flex items-center w-full">
             <input
               type="text"
               value={input}
+              disabled
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
-              className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none"
+              className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none w-3/4"
             />
             <button
               onClick={handleSendMessage}
@@ -1059,7 +1102,7 @@ export default function PersonalityQuiz() {
             >
               <Send size={16} />
             </button>
-          </div> */}
+          </div>
         </div>
       )}
     </div>

@@ -3,6 +3,9 @@ import { Geist, Poppins } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import Image from "next/image";
+import uqshort from "@/public/uq-logo-short.png";
+import { RefreshButton } from "@/components/refresh";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -42,12 +45,23 @@ export default function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 py-2">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Career Finder</Link>
+                    <Link href={"/"}>
+                      <Image
+                        src={uqshort}
+                        alt="UNITAR Logo"
+                        width={50}
+                        height={50}
+                        className="w-14 h-14"
+                      />
+                    </Link>
                   </div>
-                  <ThemeSwitcher />
+                  <div className="flex flex-row gap-2">
+                    <RefreshButton />
+                    <ThemeSwitcher />
+                  </div>
                 </div>
               </nav>
               <div className="flex flex-col gap-20 w-full p-0">{children}</div>
