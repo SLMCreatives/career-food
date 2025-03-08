@@ -41,6 +41,7 @@ export default function PersonalityQuiz() {
   const [showChat, setShowChat] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
   const [quizStage, setQuizStage] = useState("intro");
+  const [hitstart, setHitstart] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({
     personality: { ei: "", sn: "", tf: "", jp: "" },
     career: { environment: "", passion: "", strength: "", industry: "" }
@@ -70,6 +71,12 @@ export default function PersonalityQuiz() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showChat]);
 
+  useEffect(() => {
+    if (hitstart) {
+      hitStart();
+    }
+  }, [hitstart]);
+
   const preQuiz = () => {
     const preQuizMessage: Message = {
       id: Date.now(),
@@ -78,6 +85,15 @@ export default function PersonalityQuiz() {
     };
     startQuiz();
     setMessages([preQuizMessage]);
+  };
+
+  const hitStart = () => {
+    const intro: Message = {
+      id: Date.now(),
+      text: "In todays faced paced world...bla bla bla",
+      sender: "bot"
+    };
+    setMessages([intro]);
   };
 
   const startQuiz = () => {
@@ -121,7 +137,7 @@ export default function PersonalityQuiz() {
     setQuizStage("ei");
     const eiQuestion: Message = {
       id: Date.now(),
-      text: `Question 1. \n\n It's the weekend. No school, no exams, no stress (unless your mom suddenly remembers you exist and assigns house chores).\n\nWhat's the plan ${name}?`,
+      text: `Question 1. \n\nIt's the weekend. No school, no exams, no stress (unless your mom suddenly remembers you exist and assigns house chores).\n\nWhat's the plan ${name}?`,
       sender: "bot",
       options: [
         {
@@ -328,7 +344,7 @@ export default function PersonalityQuiz() {
     setQuizStage("sn");
     const snQuestion: Message = {
       id: Date.now(),
-      text: "You're learning something new. What's your approach?",
+      text: "Question 2 \n\nYou're learning something new. What's your approach?",
       sender: "bot",
       options: [
         {
@@ -997,7 +1013,7 @@ export default function PersonalityQuiz() {
   };
 
   return (
-    <div className="relative min-w-96 max-w-xl">
+    <div className="relative min-w-96 max-w-md">
       {showNotification && (
         <div className="bg-black border-2 border-stone-950 shadow-lg dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden text-sm flex flex-col h-[700px]">
           <div className="text-center mb-auto font-bold text-xl pb-4">
@@ -1012,8 +1028,8 @@ export default function PersonalityQuiz() {
           </div>
           <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
             <p>
-              Answer a few questions and find out your MBTI personality type,
-              ideal career path, and Ramadhan food soulmate.
+              Answer a few questions and find out your ideal career path, and
+              Ramadhan food soulmate.
             </p>
           </div>
           <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
@@ -1029,7 +1045,7 @@ export default function PersonalityQuiz() {
           {/* <button
             onClick={handleOpenChat}
             className="bg-pink-200 text-black rounded-full py-3 px-6 mb-3 hover:font-bold hover:bg-pink-400 transition-colors duration-300 ease-in-out"
-          >
+            >
             *Start Quiz*
           </button> */}
           <div className="flex items-center w-full">
