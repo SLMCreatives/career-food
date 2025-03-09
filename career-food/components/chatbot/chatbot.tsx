@@ -4,6 +4,7 @@ import type React from "react";
 
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
+import { createClient } from "@supabase/supabase-js";
 
 export type Message = {
   id: number;
@@ -33,6 +34,11 @@ export type QuizAnswers = {
   };
 };
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+);
+
 export default function PersonalityQuiz() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -42,10 +48,13 @@ export default function PersonalityQuiz() {
   const [currentDate, setCurrentDate] = useState("");
   const [quizStage, setQuizStage] = useState("intro");
   const [hitstart, setHitstart] = useState(false);
+  const [qOne, setqOne] = useState("");
   const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({
     personality: { ei: "", sn: "", tf: "", jp: "" },
     career: { environment: "", passion: "", strength: "", industry: "" }
   });
+
+  console.log(quizAnswers);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -669,8 +678,24 @@ export default function PersonalityQuiz() {
         ...prev,
         career: { ...prev.career, industry: value }
       }));
-      setTimeout(() => showResults(), 2000);
+      setTimeout(() => submitResults(), 2000);
     }
+  };
+
+  const askSubmitResults = () => {
+    const resultsQuestion: Message = {
+      id: Date.now(),
+      text: "Ready to see your results?",
+      sender: "bot",
+      options: [
+        {
+          text: "Submit my the results!",
+          value: "results",
+          action: () => submitResults()
+        }
+      ]
+    };
+    setMessages((prev) => [...prev, resultsQuestion]);
   };
 
   const askPassionQuestion = () => {
@@ -1006,6 +1031,45 @@ export default function PersonalityQuiz() {
   const handleOpenChat = () => {
     setShowNotification(false);
     setShowChat(true);
+    handlenameSubmit();
+  };
+
+  const handlenameSubmit = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .insert([{ user_id: user?.id, user_name: name }])
+      .select();
+
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success");
+    }
+  };
+
+  const submitResults = async () => {
+    console.log(quizAnswers);
+    /* const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({
+        personality: quizAnswers.personality,
+        career: quizAnswers.career
+      })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error submitting results", error);
+    } else {
+      console.log("success submit results", data);
+    } */
   };
 
   const handleIgnore = () => {
@@ -1017,27 +1081,9 @@ export default function PersonalityQuiz() {
       {showNotification && (
         <div className="bg-black border-2 border-stone-950 shadow-lg dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden text-sm flex flex-col h-[700px]">
           <div className="text-center mb-auto font-bold text-xl pb-4">
-            👷 Career Finder
+            👷 Persona Check
           </div>
 
-          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
-            <p>
-              In todays fast-paced world, finding the perfect career path can be
-              a daunting task. That is where our career finder comes in!
-            </p>
-          </div>
-          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
-            <p>
-              Answer a few questions and find out your ideal career path, and
-              Ramadhan food soulmate.
-            </p>
-          </div>
-          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
-            <p>
-              This is a fun way to determine which career would suit your best
-              and how to get there.
-            </p>
-          </div>
           <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
             <p>To start the quiz, just type your name and click send!</p>
           </div>
@@ -1070,7 +1116,7 @@ export default function PersonalityQuiz() {
       {showChat && (
         <div className="bg-black dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[700px]">
           <div className="text-center mb-auto font-bold text-xl pb-4">
-            👷 Career Finder
+            👷 Persona Check
           </div>
           <div className="flex-1 overflow-y-auto mb-4 space-y-4">
             {messages.map((message) => (
