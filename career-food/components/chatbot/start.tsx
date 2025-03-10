@@ -3,6 +3,8 @@
 import { useState } from "react";
 import NotificationChatbot from "@/components/chatbot/chatbot";
 import { createClient } from "@supabase/supabase-js";
+import { signOutAction } from "@/app/actions";
+import { RefreshCcw, Trash2 } from "lucide-react";
 
 export default function StartPage() {
   const supabase = createClient(
@@ -11,6 +13,7 @@ export default function StartPage() {
   );
 
   const [start, setStart] = useState(false);
+  const [userexist, setUserexist] = useState(false);
   const [results, setResults] = useState(false);
   const startQuiz = () => {
     checkUserexist();
@@ -56,6 +59,23 @@ export default function StartPage() {
     }
   };
 
+  const deleteRow = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { error } = await supabase
+      .from("users_answers")
+      .delete()
+      .eq("user_id", user?.id);
+
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("user deleted");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 text-center">
       {start ? (
@@ -90,6 +110,12 @@ export default function StartPage() {
               className="bg-primary text-white px-4 py-2 rounded-md"
             >
               Start Quiz
+            </button>
+            <button
+              onClick={() => deleteRow()}
+              className="bg-primary text-white px-4 py-2 rounded-md"
+            >
+              <Trash2 className="w-6 h-6" />
             </button>
           </div>
           <div className="w-80 h-72 border border-gray-400 rounded-sm bg-gray-50 items-center justify-center flex flex-col">

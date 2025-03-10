@@ -5,6 +5,7 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 export type Message = {
   id: number;
@@ -53,8 +54,6 @@ export default function PersonalityQuiz() {
     personality: { ei: "", sn: "", tf: "", jp: "" },
     career: { environment: "", passion: "", strength: "", industry: "" }
   });
-
-  console.log(quizAnswers);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -215,17 +214,23 @@ export default function PersonalityQuiz() {
         {
           text: "Quiet time with my book and tea.",
           value: "I",
-          action: () => {}
+          action: () => {
+            handleqOne("ei", "I");
+          }
         },
         {
           text: "Small group hangout, good vibes only.",
           value: "E-",
-          action: () => {}
+          action: () => {
+            handleqOne("ei", "E-");
+          }
         },
         {
           text: "Solo adventure, just me and the world.",
           value: "I+",
-          action: () => {}
+          action: () => {
+            handleqOne("ei", "I+");
+          }
         }
       ];
     } else if (category === "sn") {
@@ -323,24 +328,28 @@ export default function PersonalityQuiz() {
 
     // Update quiz answers
     if (category === "ei") {
+      handleqOne("ei", value);
       setQuizAnswers((prev) => ({
         ...prev,
         personality: { ...prev.personality, ei: value }
       }));
       setTimeout(() => askSensingIntuitionQuestion(), 2000);
     } else if (category === "sn") {
+      handleqTwo("sn", value);
       setQuizAnswers((prev) => ({
         ...prev,
         personality: { ...prev.personality, sn: value }
       }));
       setTimeout(() => askThinkingFeelingQuestion(), 2000);
     } else if (category === "tf") {
+      handleqThree("tf", value);
       setQuizAnswers((prev) => ({
         ...prev,
         personality: { ...prev.personality, tf: value }
       }));
       setTimeout(() => askJudgingPerceivingQuestion(), 2000);
     } else if (category === "jp") {
+      handleqFour("jp", value);
       setQuizAnswers((prev) => ({
         ...prev,
         personality: { ...prev.personality, jp: value }
@@ -656,46 +665,34 @@ export default function PersonalityQuiz() {
 
     // Update quiz answers
     if (category === "environment") {
+      handleqFive("environment", value);
       setQuizAnswers((prev) => ({
         ...prev,
         career: { ...prev.career, environment: value }
       }));
       setTimeout(() => askPassionQuestion(), 2000);
     } else if (category === "passion") {
+      handleqSix("passion", value);
       setQuizAnswers((prev) => ({
         ...prev,
         career: { ...prev.career, passion: value }
       }));
       setTimeout(() => askStrengthQuestion(), 2000);
     } else if (category === "strength") {
+      handleqSeven("strength", value);
       setQuizAnswers((prev) => ({
         ...prev,
         career: { ...prev.career, strength: value }
       }));
       setTimeout(() => askIndustryQuestion(), 2000);
     } else if (category === "industry") {
+      handleqEight("industry", value);
       setQuizAnswers((prev) => ({
         ...prev,
         career: { ...prev.career, industry: value }
       }));
-      setTimeout(() => submitResults(), 2000);
+      setTimeout(() => askSubmitResults(), 2000);
     }
-  };
-
-  const askSubmitResults = () => {
-    const resultsQuestion: Message = {
-      id: Date.now(),
-      text: "Ready to see your results?",
-      sender: "bot",
-      options: [
-        {
-          text: "Submit my the results!",
-          value: "results",
-          action: () => submitResults()
-        }
-      ]
-    };
-    setMessages((prev) => [...prev, resultsQuestion]);
   };
 
   const askPassionQuestion = () => {
@@ -809,195 +806,23 @@ export default function PersonalityQuiz() {
     setMessages((prev) => [...prev, industryQuestion]);
   };
 
-  const showResults = () => {
-    setQuizStage("results");
-
-    // Determine MBTI type
-    const mbtiType = determineMBTI();
-
-    // Determine career path
-    const careerPath = determineCareer();
-
-    // Determine Ramadhan food
-    const ramadhanFood = determineRamadhanFood(mbtiType);
-
-    const resultsMessage: Message = {
+  const askSubmitResults = () => {
+    setQuizStage("submit");
+    const resultsQuestion: Message = {
       id: Date.now(),
-      text: `🎉 Results are in! 🎉\n\n🧠 Your MBTI Personality Type: ${mbtiType}\n\n💼 Your Ideal Career Path: ${careerPath}\n\n🍽️ Your Ramadhan Food Soul Match: ${ramadhanFood}\n\nWant to know which course you should take?`,
+      text: "Ready to see your results?",
       sender: "bot",
       options: [
         {
-          text: "Take the quiz again!",
-          value: "restart",
+          text: "Go to Results!",
+          value: "results",
           action: () => {
-            setQuizStage("intro");
-            setQuizAnswers({
-              personality: { ei: "", sn: "", tf: "", jp: "" },
-              career: {
-                environment: "",
-                passion: "",
-                strength: "",
-                industry: ""
-              }
-            });
-            startQuiz();
-          }
-        },
-        {
-          text: "Share with friends",
-          value: "share",
-          action: () => {
-            navigator.share({
-              title: "CareerFood",
-              text: "Check out CareerFood! A fun quiz to find your ideal career and Ramadhan food.",
-              url: window.location.href
-            });
+            window.location.href = "/results";
           }
         }
       ]
     };
-    setMessages((prev) => [...prev, resultsMessage]);
-  };
-
-  const determineMBTI = () => {
-    const { ei, sn, tf, jp } = quizAnswers.personality;
-
-    const e_i = ei.startsWith("E") ? "E" : "I";
-    const s_n = sn.startsWith("S") ? "S" : "N";
-    const t_f = tf.startsWith("T") ? "T" : "F";
-    const j_p = jp.startsWith("J") ? "J" : "P";
-
-    return `${e_i}${s_n}${t_f}${j_p}`;
-  };
-
-  const determineCareer = () => {
-    const mbti = determineMBTI();
-    const { environment, passion, industry } = quizAnswers.career;
-
-    // This is a simplified mapping - in a real app, you'd have more complex logic
-    const careerMap: Record<string, Record<string, string>> = {
-      INTJ: {
-        tech: "Data Scientist or AI Researcher",
-        business: "Strategic Consultant",
-        engineering: "Systems Architect",
-        default: "Strategic Planner or Analyst"
-      },
-      ENTJ: {
-        business: "CEO or Executive",
-        tech: "Tech Startup Founder",
-        default: "Business Leader or Manager"
-      },
-      INFJ: {
-        psychology: "Therapist or Counselor",
-        education: "Teacher or Professor",
-        arts: "Writer or Content Creator",
-        default: "Counselor or Coach"
-      },
-      ENFJ: {
-        education: "School Principal",
-        psychology: "Motivational Speaker",
-        default: "Team Leader or HR Manager"
-      },
-      INFP: {
-        arts: "Writer or Artist",
-        psychology: "Counselor",
-        default: "Creative Writer or Designer"
-      },
-      ENFP: {
-        arts: "Performer or Creative Director",
-        psychology: "Life Coach",
-        default: "Creative Consultant or Entrepreneur"
-      },
-      INTP: {
-        tech: "Software Developer",
-        engineering: "Research Scientist",
-        default: "Researcher or Analyst"
-      },
-      ENTP: {
-        business: "Entrepreneur",
-        tech: "Innovation Consultant",
-        default: "Entrepreneur or Consultant"
-      },
-      ISTJ: {
-        business: "Financial Analyst",
-        engineering: "Civil Engineer",
-        default: "Project Manager or Accountant"
-      },
-      ESTJ: {
-        business: "Business Administrator",
-        default: "Manager or Administrator"
-      },
-      ISFJ: {
-        education: "Elementary Teacher",
-        hospitality: "Hotel Manager",
-        default: "Administrative Assistant or Nurse"
-      },
-      ESFJ: {
-        hospitality: "Event Planner",
-        education: "School Counselor",
-        default: "HR Specialist or Community Manager"
-      },
-      ISTP: {
-        engineering: "Mechanical Engineer",
-        tech: "Systems Administrator",
-        default: "Technical Specialist or Craftsperson"
-      },
-      ESTP: {
-        business: "Sales Representative",
-        hospitality: "Tour Guide",
-        default: "Entrepreneur or Sales Professional"
-      },
-      ISFP: {
-        arts: "Graphic Designer",
-        hospitality: "Chef",
-        default: "Designer or Artist"
-      },
-      ESFP: {
-        arts: "Performer",
-        hospitality: "Travel Agent",
-        default: "Event Coordinator or Entertainer"
-      }
-    };
-
-    // Default career if specific mapping not found
-    let career = "Professional with strong analytical and creative skills";
-
-    if (careerMap[mbti]) {
-      if (careerMap[mbti][industry]) {
-        career = careerMap[mbti][industry];
-      } else {
-        career = careerMap[mbti]["default"];
-      }
-    }
-
-    return career;
-  };
-
-  const determineRamadhanFood = (mbtiType: string) => {
-    // Map MBTI types to Ramadhan foods
-    const foodMap: Record<string, string> = {
-      INTJ: "Dates - Sweet, strategic, and essential for breaking fast",
-      ENTJ: "Lamb Biryani - Bold, flavorful, and takes charge of the dinner table",
-      INFJ: "Rose Syrup - Thoughtful, sweet, and adds depth to any drink",
-      ENFJ: "Samosas - Brings everyone together and makes the party happen",
-      INFP: "Baklava - Layered, sweet, and surprisingly complex",
-      ENFP: "Fruit Chaat - Colorful, exciting, and full of surprises",
-      INTP: "Plain Roti - Simple but essential, with hidden complexity",
-      ENTP: "Falooda - Creative, colorful, and never boring",
-      ISTJ: "Plain Rice - Reliable, consistent, and goes with everything",
-      ESTJ: "Kebabs - Structured, organized, and gets the job done",
-      ISFJ: "Chicken Soup - Nurturing, comforting, and takes care of everyone",
-      ESFJ: "Iftar Platter - Organized, generous, and makes sure everyone is fed",
-      ISTP: "Grilled Meat - Practical, straightforward, and satisfying",
-      ESTP: "Spicy Biryani - Bold, adventurous, and lives in the moment",
-      ISFP: "Sheer Khurma - Artistic, delicate, and aesthetically pleasing",
-      ESFP: "Jalebi - Sweet, fun, and the life of the party"
-    };
-
-    return (
-      foodMap[mbtiType] ||
-      "Special Ramadhan Mix - A unique blend just like you!"
-    );
+    setMessages((prev) => [...prev, resultsQuestion]);
   };
 
   const handleSendMessage = () => {
@@ -1051,29 +876,137 @@ export default function PersonalityQuiz() {
     }
   };
 
-  const submitResults = async () => {
-    console.log(quizAnswers);
-    /* const {
+  const handleIgnore = () => {
+    setShowNotification(false);
+  };
+
+  const handleqOne = async (category: string, value: string) => {
+    const {
       data: { user }
     } = await supabase.auth.getUser();
 
     const { data, error } = await supabase
       .from("users_answers")
-      .update({
-        personality: quizAnswers.personality,
-        career: quizAnswers.career
-      })
+      .update({ q_one: value })
       .eq("user_id", user?.id)
       .select();
     if (error) {
-      console.log("error submitting results", error);
+      console.log("error", error);
     } else {
-      console.log("success submit results", data);
-    } */
+      console.log("success", data);
+    }
   };
+  const handleqTwo = async (category: string, value: string) => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
 
-  const handleIgnore = () => {
-    setShowNotification(false);
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({ q_two: value })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success", data);
+    }
+  };
+  const handleqThree = async (category: string, value: string) => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({ q_three: value })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success", data);
+    }
+  };
+  const handleqFour = async (category: string, value: string) => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({ q_four: value })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success", data);
+    }
+  };
+  const handleqFive = async (category: string, value: string) => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({ q_five: value })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success", data);
+    }
+  };
+  const handleqSix = async (category: string, value: string) => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({ q_six: value })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success", data);
+    }
+  };
+  const handleqSeven = async (category: string, value: string) => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({ q_seven: value })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success", data);
+    }
+  };
+  const handleqEight = async (category: string, value: string) => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .update({ q_eight: value })
+      .eq("user_id", user?.id)
+      .select();
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("success", data);
+    }
   };
 
   return (
