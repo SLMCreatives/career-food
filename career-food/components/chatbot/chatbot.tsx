@@ -817,7 +817,9 @@ export default function PersonalityQuiz() {
           text: "Go to Results!",
           value: "results",
           action: () => {
-            window.location.href = "/results";
+            setTimeout(() => {
+              getResults();
+            }, 2000);
           }
         }
       ]
@@ -1009,6 +1011,156 @@ export default function PersonalityQuiz() {
     }
   };
 
+  const personalityType = () => {};
+
+  const matchFoodIcon = async (p0: any /* quizAnswers: QuizAnswers */) => {
+    /* const { personality, career } = quizAnswers; */
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .select("*")
+      .eq("user_id", user?.id);
+
+    console.log(data, "fromdb");
+
+    /*     const personality = ;
+     */ // Extract personality type
+    if (!data || data.length === 0) {
+      console.log("No data found");
+      return;
+    }
+    const mbtiType = `${data[0].q_one}${data[0].q_two}${data[0].q_three}${data[0].q_four}`;
+
+    const career = {
+      environment: data[0].q_five,
+      passion: data[0].q_six,
+      strength: data[0].q_seven,
+      industry: data[0].q_eight
+    };
+
+    console.log(mbtiType, career);
+
+    // Match logic based on MBTI and career preferences
+    if (
+      mbtiType.startsWith("INF") &&
+      career.environment === "fast-paced" &&
+      career.passion === "business" &&
+      career.strength === "practical" &&
+      career.industry === "education"
+    ) {
+      return {
+        food: "Bubur Lambuk",
+        message:
+          "You're warm and comforting, just like Bubur Lambuk! A natural educator and guide, you thrive in careers that help others grow. 📚✨"
+      };
+    }
+    if (
+      mbtiType.startsWith("ENT") &&
+      career.environment === "fast-paced" &&
+      career.passion === "business" &&
+      career.industry === "tech"
+    ) {
+      return {
+        food: "Popiah",
+        message:
+          "You're a tech innovator—quick, flexible, and always adapting. Just like Popiah, you're packed with great ideas and always ready for the next challenge! 💻🚀"
+      };
+    }
+    if (
+      mbtiType.startsWith("IST") &&
+      career.environment === "hands-on" &&
+      career.passion === "solving" &&
+      career.industry === "engineering"
+    ) {
+      return {
+        food: "Murtabak",
+        message:
+          "You're a strategist, always thinking a few steps ahead. Like Murtabak, you have layers of creativity and logic that make you great at planning and execution! 📊🎯"
+      };
+    }
+    if (
+      mbtiType.startsWith("ENF") &&
+      career.passion === "creating" &&
+      career.industry === "arts"
+    ) {
+      return {
+        food: "Kuih Lapis",
+        message:
+          "You're a creative soul—expressive, unique, and full of color. Like Kuih Lapis, you bring joy and artistry to the world! 🎨🌈"
+      };
+    }
+    if (
+      mbtiType.startsWith("INF") &&
+      career.passion === "helping" &&
+      career.industry === "psychology"
+    ) {
+      return {
+        food: "Soya Cincau",
+        message:
+          "You're a deep thinker, always calm and balanced. Like Soya Cincau, you help others find clarity and peace in life. 🧠☯️"
+      };
+    }
+
+    return {
+      food: "Ketupat",
+      message:
+        "You're a mystery—hard to define, but full of potential! Like Ketupat, your skills can fit into many fields. Keep exploring! 🌍🎭"
+    };
+  };
+
+  const getResults = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .select("*")
+      .eq("user_id", user?.id);
+
+    if (error) {
+      console.log("error", error);
+    } else {
+      const result = await matchFoodIcon(data[0]); // Get food match
+      if (result) {
+        console.log("Your Ramadhan Food Icon:", result.food);
+
+        // Display results in chatbot
+        const resultsMessage: Message = {
+          id: Date.now(),
+          text: `Based on your personality and career interests, your **Ramadhan food icon** is:\n\n🥘 **${result.food}** 🥘\n\n${result.message}`,
+          sender: "bot"
+        };
+
+        setMessages((prev) => [...prev, resultsMessage]);
+      } else {
+        console.log("No result found");
+      }
+    }
+  };
+
+  /* const getResults = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    const { data: myr, error } = await supabase
+      .from("users_answers")
+      .select("*")
+      .eq("user_id", user?.id);
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("My Results", myr);
+    }
+  };
+
+  const userResults = () => {
+    getResults();
+  }; */
+
   return (
     <div className="relative min-w-96 max-w-md">
       {showNotification && (
@@ -1100,6 +1252,13 @@ export default function PersonalityQuiz() {
           </div>
         </div>
       )}
+
+      {/*  <button
+        onClick={Results}
+        className="bg-pink-200 text-black rounded-full py-3 px-6 mb-3 hover:font-bold hover:bg-pink-400 transition-colors duration-300 ease-in-out"
+      >
+        Get My Results
+      </button> */}
     </div>
   );
 }
