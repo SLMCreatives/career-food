@@ -887,9 +887,13 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
+    const valueLetter = value.split("")[0];
+
+    console.log(valueLetter);
+
     const { data, error } = await supabase
       .from("users_answers")
-      .update({ q_one: value })
+      .update({ q_one: valueLetter })
       .eq("user_id", user?.id)
       .select();
     if (error) {
@@ -903,9 +907,11 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
+    const valueLetter = value.split("")[0];
+
     const { data, error } = await supabase
       .from("users_answers")
-      .update({ q_two: value })
+      .update({ q_two: valueLetter })
       .eq("user_id", user?.id)
       .select();
     if (error) {
@@ -919,9 +925,11 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
+    const valueLetter = value.split("")[0];
+
     const { data, error } = await supabase
       .from("users_answers")
-      .update({ q_three: value })
+      .update({ q_three: valueLetter })
       .eq("user_id", user?.id)
       .select();
     if (error) {
@@ -935,9 +943,11 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
+    const valueLetter = value.split("")[0];
+
     const { data, error } = await supabase
       .from("users_answers")
-      .update({ q_four: value })
+      .update({ q_four: valueLetter })
       .eq("user_id", user?.id)
       .select();
     if (error) {
@@ -1044,6 +1054,106 @@ export default function PersonalityQuiz() {
     console.log(mbtiType, career);
 
     // Match logic based on MBTI and career preferences
+    if (mbtiType.startsWith("ISTJ")) {
+      return {
+        food: "Bubur Lambuk",
+        message: "The Inspector"
+      };
+    }
+    if (mbtiType.startsWith("ISFJ")) {
+      return {
+        food: "Bubur Lambuk",
+        message: "The Defender"
+      };
+    }
+    if (mbtiType.startsWith("INFJ")) {
+      return {
+        food: "Soya Cincau",
+        message: "The Advocate"
+      };
+    }
+    if (mbtiType.startsWith("INTJ")) {
+      return {
+        food: "Popiah",
+        message: "The Mastermind"
+      };
+    }
+    if (mbtiType.startsWith("ISTP")) {
+      return {
+        food: "Popiah",
+        message: "The Virtuoso"
+      };
+    }
+    if (mbtiType.startsWith("ISFP")) {
+      return {
+        food: "Kuih Lapis",
+        message: "The Composer"
+      };
+    }
+    if (mbtiType.startsWith("INFP")) {
+      return {
+        food: "Kuih Lapis",
+        message: "The Mediator"
+      };
+    }
+    if (mbtiType.startsWith("INTP")) {
+      return {
+        food: "Soya Cincau",
+        message: "The Thinker"
+      };
+    }
+    if (mbtiType.startsWith("ESTP")) {
+      return {
+        food: "Murtabak",
+        message: "The Entrepreneur"
+      };
+    }
+    if (mbtiType.startsWith("ESFP")) {
+      return {
+        food: "Air Katira",
+        message: "The Entertainer"
+      };
+    }
+    if (mbtiType.startsWith("ENFP")) {
+      return {
+        food: "Kuih Lapis",
+        message: "The Campaigner"
+      };
+    }
+    if (mbtiType.startsWith("ENTP")) {
+      return {
+        food: "Murtabak",
+        message: "The Debater"
+      };
+    }
+    if (mbtiType.startsWith("ESTJ")) {
+      return {
+        food: "Tepung Pelita",
+        message: "The Executive"
+      };
+    }
+    if (mbtiType.startsWith("ESFJ")) {
+      return {
+        food: "Bubur Lambuk",
+        message: "The Counselor"
+      };
+    }
+    if (mbtiType.startsWith("ENFJ")) {
+      return {
+        food: "Soya Cincau",
+        message: "The Protagonist"
+      };
+    }
+    if (mbtiType.startsWith("ENTJ")) {
+      return {
+        food: "Tepung Pelita",
+        message: "The Commander"
+      };
+    }
+  };
+
+  /* 
+    //old combinations
     if (
       mbtiType.startsWith("INF") &&
       career.environment === "fast-paced" &&
@@ -1109,7 +1219,7 @@ export default function PersonalityQuiz() {
       message:
         "You're a mystery—hard to define, but full of potential! Like Ketupat, your skills can fit into many fields. Keep exploring! 🌍🎭"
     };
-  };
+  }; */
 
   const getResults = async () => {
     const {
