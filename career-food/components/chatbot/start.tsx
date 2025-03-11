@@ -16,14 +16,15 @@ export default function StartPage() {
   const [userexist, setUserexist] = useState(false);
   const [results, setResults] = useState(false);
   const startQuiz = () => {
-    checkUserexist();
+    /* checkUserexist(); */
+    anonUsersignin();
   };
 
   const checkUserexist = async () => {
-    const { data, error } = await supabase.auth.getSession();
-    if (data.session === null) {
-      console.log("new User");
-      refreshSession();
+    const { data, error } = await supabase.auth.getUser();
+    if (!data) {
+      console.log("new User", data);
+      anonUsersignin();
     } else {
       console.log("success", data);
       window.location.href = "/results";
@@ -37,7 +38,6 @@ export default function StartPage() {
       setStart(true);
     } else {
       console.log("success", data);
-      window.location.href = "/results";
     }
   };
 
@@ -47,6 +47,7 @@ export default function StartPage() {
       console.log(error);
     } else {
       console.log("success", data);
+      setStart(true);
     }
   };
 
@@ -111,14 +112,14 @@ export default function StartPage() {
             >
               Start Quiz
             </button>
-            <button
+            {/* <button
               onClick={() => deleteRow()}
               className="bg-primary text-white px-4 py-2 rounded-md"
             >
               <Trash2 className="w-6 h-6" />
-            </button>
+            </button> */}
           </div>
-          <div className="w-80 h-72 border border-gray-400 rounded-sm bg-gray-50 items-center justify-center flex flex-col">
+          {/*  <div className="w-80 h-72 border border-gray-400 rounded-sm bg-gray-50 items-center justify-center flex flex-col">
             <p className="text-md text-fuchsia-500 text-center pt-4">
               Sulaiman is an Popiah
             </p>
@@ -131,7 +132,7 @@ export default function StartPage() {
             <p className="text-md text-fuchsia-500 text-center pt-4">
               Lisna is an Murtabak
             </p>
-          </div>
+          </div> */}
         </div>
       )}
 

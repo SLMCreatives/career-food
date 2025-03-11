@@ -1021,9 +1021,7 @@ export default function PersonalityQuiz() {
     }
   };
 
-  const personalityType = () => {};
-
-  const matchFoodIcon = async (p0: any /* quizAnswers: QuizAnswers */) => {
+  const matchFoodIcon = async (p0: any) => {
     /* const { personality, career } = quizAnswers; */
     const {
       data: { user }
@@ -1033,8 +1031,6 @@ export default function PersonalityQuiz() {
       .from("users_answers")
       .select("*")
       .eq("user_id", user?.id);
-
-    console.log(data, "fromdb");
 
     /*     const personality = ;
      */ // Extract personality type
@@ -1050,9 +1046,6 @@ export default function PersonalityQuiz() {
       strength: data[0].q_seven,
       industry: data[0].q_eight
     };
-
-    console.log(mbtiType, career);
-
     // Match logic based on MBTI and career preferences
     if (mbtiType.startsWith("ISTJ")) {
       return {
@@ -1152,75 +1145,6 @@ export default function PersonalityQuiz() {
     }
   };
 
-  /* 
-    //old combinations
-    if (
-      mbtiType.startsWith("INF") &&
-      career.environment === "fast-paced" &&
-      career.passion === "business" &&
-      career.strength === "practical" &&
-      career.industry === "education"
-    ) {
-      return {
-        food: "Bubur Lambuk",
-        message:
-          "You're warm and comforting, just like Bubur Lambuk! A natural educator and guide, you thrive in careers that help others grow. 📚✨"
-      };
-    }
-    if (
-      mbtiType.startsWith("ENT") &&
-      career.environment === "fast-paced" &&
-      career.passion === "business" &&
-      career.industry === "tech"
-    ) {
-      return {
-        food: "Popiah",
-        message:
-          "You're a tech innovator—quick, flexible, and always adapting. Just like Popiah, you're packed with great ideas and always ready for the next challenge! 💻🚀"
-      };
-    }
-    if (
-      mbtiType.startsWith("IST") &&
-      career.environment === "hands-on" &&
-      career.passion === "solving" &&
-      career.industry === "engineering"
-    ) {
-      return {
-        food: "Murtabak",
-        message:
-          "You're a strategist, always thinking a few steps ahead. Like Murtabak, you have layers of creativity and logic that make you great at planning and execution! 📊🎯"
-      };
-    }
-    if (
-      mbtiType.startsWith("ENF") &&
-      career.passion === "creating" &&
-      career.industry === "arts"
-    ) {
-      return {
-        food: "Kuih Lapis",
-        message:
-          "You're a creative soul—expressive, unique, and full of color. Like Kuih Lapis, you bring joy and artistry to the world! 🎨🌈"
-      };
-    }
-    if (
-      mbtiType.startsWith("INF") &&
-      career.passion === "helping" &&
-      career.industry === "psychology"
-    ) {
-      return {
-        food: "Soya Cincau",
-        message:
-          "You're a deep thinker, always calm and balanced. Like Soya Cincau, you help others find clarity and peace in life. 🧠☯️"
-      };
-    }
-
-    return {
-      food: "Ketupat",
-      message:
-        "You're a mystery—hard to define, but full of potential! Like Ketupat, your skills can fit into many fields. Keep exploring! 🌍🎭"
-    };
-  }; */
-
   const getResults = async () => {
     const {
       data: { user }
@@ -1236,13 +1160,26 @@ export default function PersonalityQuiz() {
     } else {
       const result = await matchFoodIcon(data[0]); // Get food match
       if (result) {
-        console.log("Your Ramadhan Food Icon:", result.food);
+        const { data, error } = await supabase
+          .from("users_answers")
+          .update({ icon: result.food })
+          .eq("user_id", user?.id)
+          .select();
 
         // Display results in chatbot
         const resultsMessage: Message = {
           id: Date.now(),
-          text: `Based on your personality and career interests, your **Ramadhan food icon** is:\n\n🥘 **${result.food}** 🥘\n\n${result.message}`,
-          sender: "bot"
+          text: `Based on your personality and career interests, your Ramadhan food icon is:\n\n🥘 **${result.food}** 🥘\n\n${result.message}\n\nDo you want to view your full results?`,
+          sender: "bot",
+          options: [
+            {
+              text: "Yes, show me!",
+              value: "results",
+              action: () => {
+                window.location.href = "/results";
+              }
+            }
+          ]
         };
 
         setMessages((prev) => [...prev, resultsMessage]);
@@ -1251,25 +1188,6 @@ export default function PersonalityQuiz() {
       }
     }
   };
-
-  /* const getResults = async () => {
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    const { data: myr, error } = await supabase
-      .from("users_answers")
-      .select("*")
-      .eq("user_id", user?.id);
-    if (error) {
-      console.log("error", error);
-    } else {
-      console.log("My Results", myr);
-    }
-  };
-
-  const userResults = () => {
-    getResults();
-  }; */
 
   return (
     <div className="relative min-w-96 max-w-md">
@@ -1282,13 +1200,6 @@ export default function PersonalityQuiz() {
           <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
             <p>To start the quiz, just type your name and click send!</p>
           </div>
-
-          {/* <button
-            onClick={handleOpenChat}
-            className="bg-pink-200 text-black rounded-full py-3 px-6 mb-3 hover:font-bold hover:bg-pink-400 transition-colors duration-300 ease-in-out"
-            >
-            *Start Quiz*
-          </button> */}
           <div className="flex items-center w-full">
             <input
               type="text"
