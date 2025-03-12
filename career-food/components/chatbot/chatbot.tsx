@@ -5,10 +5,8 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
-import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export type Message = {
   id: number;
