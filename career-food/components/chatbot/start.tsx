@@ -3,59 +3,30 @@
 import { useState } from "react";
 import NotificationChatbot from "@/components/chatbot/chatbot";
 import { createClient } from "@supabase/supabase-js";
-import { signOutAction } from "@/app/actions";
-import { RefreshCcw, Trash2 } from "lucide-react";
 import Image from "next/image";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle
 } from "../ui/card";
 import { Button } from "../ui/button";
 
-const icons = [
-  {
-    id: 1,
-    name: "Bubur Lambuk",
-    url: "/icons/bubur-lambuk.png"
-  }
-];
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+);
 
 export default function StartPage() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-  );
-
   const [start, setStart] = useState(false);
   const [userexist, setUserexist] = useState(false);
   const [results, setResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const startQuiz = () => {
-    /* checkUserexist(); */
+    setIsLoading(true);
     anonUsersignin();
-  };
-
-  const checkUserexist = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (!data) {
-      console.log("new User", data);
-      anonUsersignin();
-    } else {
-      console.log("success", data);
-      window.location.href = "/results";
-    }
-  };
-
-  const refreshSession = async () => {
-    const { data, error } = await supabase.auth.refreshSession();
-    if (data.session === null) {
-      anonUsersignin();
-      setStart(true);
-    } else {
-      console.log("success", data);
-    }
   };
 
   const anonUsersignin = async () => {
@@ -65,32 +36,6 @@ export default function StartPage() {
     } else {
       console.log("success", data);
       setStart(true);
-    }
-  };
-
-  const userSignout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("success");
-    }
-  };
-
-  const deleteRow = async () => {
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-
-    const { error } = await supabase
-      .from("users_answers")
-      .delete()
-      .eq("user_id", user?.id);
-
-    if (error) {
-      console.log("error", error);
-    } else {
-      console.log("user deleted");
     }
   };
 
@@ -110,13 +55,13 @@ export default function StartPage() {
             height={300}
             className="w-full h-full max-w-xl"
           />
-          <Card className="w-full max-w-xl text-balance">
+          <Card className="w-full max-w-xl rounded-lg drop-shadow-xl text-balance">
             <CardHeader>
-              <CardTitle>Wondering What To Do With Your Life?</CardTitle>
-              <CardDescription>
+              <CardTitle>Check Which Career Suits You!</CardTitle>
+              {/* <CardDescription>
                 Here is a fun quiz that can give you a little bit of insight
                 into your personality and best suited career for you.
-              </CardDescription>
+              </CardDescription> */}
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4">
@@ -125,15 +70,17 @@ export default function StartPage() {
                   suits you best. Plus the best ramadan food that represents
                   you!
                 </p>
-                <Button
-                  onClick={() => startQuiz()}
-                  variant="default"
-                  /* className="bg-primary dark:text-black text-white px-4 py-2 rounded-md" */
-                >
-                  Start Quiz
-                </Button>
               </div>
             </CardContent>
+            <CardFooter className="flex justify-center">
+              <Button
+                onClick={() => startQuiz()}
+                variant="default"
+                /* className="bg-primary dark:text-black text-white px-4 py-2 rounded-md" */
+              >
+                {isLoading ? "Loading..." : "Start Here"}
+              </Button>
+            </CardFooter>
           </Card>
         </div>
       )}

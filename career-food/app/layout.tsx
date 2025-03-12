@@ -36,21 +36,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={poppins.className} suppressHydrationWarning>
-      <body className="bg-teal-100 text-foreground">
+      <body className="bg-gradient-to-br from-indigo-500 via-blue-500 to-cyan-500 text-foreground ">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          <main className="flex flex-col items-center">
+          <main className="flex flex-col items-center min-h-screen">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 py-2">
+              <nav className="w-full flex justify-center h-16 py-2 bg-white">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
                     <Link href={"/"}>
                       <Image
-                        src={uqshort}
+                        src="/unitar-logo.png"
                         alt="UNITAR Logo"
                         width={50}
                         height={50}
@@ -59,14 +59,16 @@ export default function RootLayout({
                     </Link>
                   </div>
                   <div className="flex flex-row gap-2">
-                    <RefreshButton />
-                    <ThemeSwitcher />
+                    {/*                     <RefreshButton />
+                     */}
+                    {/*                     <ThemeSwitcher />
+                     */}{" "}
                   </div>
                 </div>
               </nav>
               <div className="flex flex-col gap-20 w-full p-0">{children}</div>
 
-              <footer className="w-full flex flex-col items-center justify-center  mx-auto text-center text-xs gap-0 py-2 ">
+              <footer className="w-full flex flex-col items-center justify-center  mx-auto text-center text-white text-xs gap-0 py-2">
                 <p>
                   Powered by{" "}
                   <a

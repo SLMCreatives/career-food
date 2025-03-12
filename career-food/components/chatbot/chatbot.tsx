@@ -415,7 +415,7 @@ export default function PersonalityQuiz() {
     setQuizStage("tf");
     const tfQuestion: Message = {
       id: Date.now(),
-      text: "Your bestie is having a crisis. What's your go-to move?",
+      text: "Third Questions\n\nYour bestie is having a crisis. What's your go-to move?",
       sender: "bot",
       options: [
         {
@@ -467,7 +467,7 @@ export default function PersonalityQuiz() {
     setQuizStage("jp");
     const jpQuestion: Message = {
       id: Date.now(),
-      text: "You have a big project due next week. How do you handle it?",
+      text: "Next Question...\n\nYou have a big project due next week. How do you handle it?",
       sender: "bot",
       options: [
         {
@@ -519,7 +519,7 @@ export default function PersonalityQuiz() {
     setQuizStage("career-environment");
     const environmentQuestion: Message = {
       id: Date.now(),
-      text: "In your dream career, what kind of work environment would you prefer?",
+      text: "In your dream job, what kind of work environment would you prefer?",
       sender: "bot",
       options: [
         {
@@ -816,7 +816,7 @@ export default function PersonalityQuiz() {
       sender: "bot",
       options: [
         {
-          text: "Go to Results!",
+          text: "Get my Results!",
           value: "results",
           action: () => {
             setTimeout(() => {
@@ -1179,9 +1179,9 @@ export default function PersonalityQuiz() {
   };
 
   return (
-    <div className="relative min-w-96 max-w-md">
+    <div className="relative min-w-96 max-w-md items-center justify-center">
       {showNotification && (
-        <div className="bg-stone-50 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[700px] drop-shadow-lg">
+        <div className="bg-stone-50 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] drop-shadow-lg">
           <Image
             src="/pcre_logo.png"
             alt="Persona Check Ramadan Edition"
@@ -1200,7 +1200,7 @@ export default function PersonalityQuiz() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter your name to begin quiz"
+              placeholder="Type your name..."
               className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none w-3/4"
             />
             <button
@@ -1214,7 +1214,7 @@ export default function PersonalityQuiz() {
       )}
 
       {showChat && (
-        <div className="bg-stone-50 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[700px] drop-shadow-lg">
+        <div className="bg-stone-100 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] drop-shadow-lg">
           <div className="flex flex-row gap-4 mx-auto items-center justify-center">
             <Image
               src="/pcre_logo.png"
@@ -1227,12 +1227,12 @@ export default function PersonalityQuiz() {
           <div className="hidden font-bold text-xl pb-4">👷 Persona Check</div>
           <div className="flex-1 overflow-y-auto mb-4 space-y-4">
             {messages.map((message) => (
-              <div key={message.id} className="space-y-2 flex flex-col gap-2">
+              <div key={message.id} className="flex flex-col gap-2">
                 <div
                   className={`${
                     message.sender === "user"
                       ? "bg-emerald-200 border border-emerald-300 text-black ml-12 text-right"
-                      : "bg-stone-100 border border-stone-200 text-black mr-12 text-left text-pretty whitespace-pre-wrap"
+                      : "bg-stone-200 border border-stone-200 text-black mr-12 text-left text-pretty whitespace-pre-wrap"
                   } rounded-lg py-3 px-4 text-sm`}
                 >
                   {message.text}
