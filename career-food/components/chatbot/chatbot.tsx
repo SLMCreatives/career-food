@@ -6,6 +6,9 @@ import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
+import Image from "next/image";
+import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export type Message = {
   id: number;
@@ -808,6 +811,7 @@ export default function PersonalityQuiz() {
 
   const askSubmitResults = () => {
     setQuizStage("submit");
+
     const resultsQuestion: Message = {
       id: Date.now(),
       text: "Ready to see your results?",
@@ -1166,25 +1170,12 @@ export default function PersonalityQuiz() {
           .eq("user_id", user?.id)
           .select();
 
-        // Display results in chatbot
-        const resultsMessage: Message = {
-          id: Date.now(),
-          text: `Based on your personality and career interests, your Ramadhan food icon is:\n\n🥘 **${result.food}** 🥘\n\n${result.message}\n\nDo you want to view your full results?`,
-          sender: "bot",
-          options: [
-            {
-              text: "Yes, show me!",
-              value: "results",
-              action: () => {
-                window.location.href = "/results";
-              }
-            }
-          ]
-        };
-
-        setMessages((prev) => [...prev, resultsMessage]);
-      } else {
-        console.log("No result found");
+        if (error) {
+          console.log("error", error);
+        } else {
+          console.log("success", data);
+          window.location.href = "/results";
+        }
       }
     }
   };
@@ -1192,10 +1183,15 @@ export default function PersonalityQuiz() {
   return (
     <div className="relative min-w-96 max-w-md">
       {showNotification && (
-        <div className="bg-black border-2 border-stone-950 shadow-lg dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden text-sm flex flex-col h-[700px]">
-          <div className="text-center mb-auto font-bold text-xl pb-4">
-            👷 Persona Check
-          </div>
+        <div className="bg-stone-50 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[700px] drop-shadow-lg">
+          <Image
+            src="/pcre_logo.png"
+            alt="Persona Check Ramadan Edition"
+            width={300}
+            height={300}
+            className="max-w-52 h-auto -mt-4 mx-auto mb-auto"
+          />
+          <div className="hidden font-bold text-xl pb-4">👷 Persona Check</div>
 
           <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
             <p>To start the quiz, just type your name and click send!</p>
@@ -1211,7 +1207,7 @@ export default function PersonalityQuiz() {
             />
             <button
               onClick={handleOpenChat}
-              className="bg-pink-200 text-black rounded-full p-3"
+              className="bg-orange-300 text-black rounded-full p-3"
             >
               <Send size={16} />
             </button>
@@ -1220,32 +1216,40 @@ export default function PersonalityQuiz() {
       )}
 
       {showChat && (
-        <div className="bg-black dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[700px]">
-          <div className="text-center mb-auto font-bold text-xl pb-4">
-            👷 Persona Check
+        <div className="bg-stone-50 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[700px] drop-shadow-lg">
+          <div className="flex flex-row gap-4 mx-auto items-center justify-center">
+            <Image
+              src="/pcre_logo.png"
+              alt="Persona Check Ramadan Edition"
+              width={300}
+              height={300}
+              className="max-w-52 h-auto -mt-4 mx-auto mb-auto"
+            />
           </div>
+          <div className="hidden font-bold text-xl pb-4">👷 Persona Check</div>
           <div className="flex-1 overflow-y-auto mb-4 space-y-4">
             {messages.map((message) => (
-              <div key={message.id} className="space-y-2">
+              <div key={message.id} className="space-y-2 flex flex-col gap-2">
                 <div
                   className={`${
                     message.sender === "user"
-                      ? "bg-emerald-200 text-black ml-12 text-right"
-                      : "bg-gray-200 text-black mr-12"
-                  } rounded-md py-3 px-4 text-md whitespace-pre-wrap text-pretty`}
+                      ? "bg-emerald-200 border border-emerald-300 text-black ml-12 text-right"
+                      : "bg-stone-100 border border-stone-200 text-black mr-12 text-left text-pretty whitespace-pre-wrap"
+                  } rounded-lg py-3 px-4 text-sm`}
                 >
                   {message.text}
                 </div>
                 {message.options && (
-                  <div className="flex flex-col items-end justify-center gap-4 py-6">
+                  <div className="flex flex-row flex-wrap items-end justify-center gap-4 py-6">
                     {message.options.map((option) => (
-                      <button
+                      <Button
                         key={option.value}
                         onClick={option.action}
-                        className="bg-pink-200 text-black rounded-full py-3 px-4 text-sm text-right hover:bg-pink-400 transition-colors"
+                        variant={"outline"}
+                        className="bg-white text-balance text-black rounded-full py-3 px-4 h-auto text-sm text-center hover:bg-orange-300 hover:drop-shadow-sm transition-colors w-full"
                       >
                         {option.text}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 )}
@@ -1261,12 +1265,12 @@ export default function PersonalityQuiz() {
               disabled
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type a message..."
+              /* placeholder="Type a message..." */
               className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none w-3/4"
             />
             <button
               onClick={handleSendMessage}
-              className="bg-pink-200 text-black rounded-full p-3"
+              className="bg-orange-300 text-black rounded-full p-3"
             >
               <Send size={16} />
             </button>

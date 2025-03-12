@@ -5,6 +5,23 @@ import NotificationChatbot from "@/components/chatbot/chatbot";
 import { createClient } from "@supabase/supabase-js";
 import { signOutAction } from "@/app/actions";
 import { RefreshCcw, Trash2 } from "lucide-react";
+import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "../ui/card";
+import { Button } from "../ui/button";
+
+const icons = [
+  {
+    id: 1,
+    name: "Bubur Lambuk",
+    url: "/icons/bubur-lambuk.png"
+  }
+];
 
 export default function StartPage() {
   const supabase = createClient(
@@ -83,71 +100,42 @@ export default function StartPage() {
         <NotificationChatbot />
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 pt-10 px-8 ">
-          <h1 className="text-4xl font-bold">
-            Welcome to UNITAR Persona Check: Ramadhan Edition
+          <h1 className="text-4xl sr-only font-bold">
+            UNITAR Persona Check: Ramadhan Edition
           </h1>
-          <p className="text-lg text-center">
-            This quiz will help you to find the best career path that suits you
-            best. Plus the best ramadan food that represents you!
-          </p>
-          <p>
-            In todays fast-paced world, finding the perfect career path can be a
-            daunting task. That is where our career finder comes in!
-          </p>
-
-          <p>
-            Answer a few questions and find out your ideal career path, and
-            Ramadhan food soulmate.
-          </p>
-
-          <p>
-            This is a fun way to determine which career would suit your best and
-            how to get there.
-          </p>
-
-          <div className="py-8 flex flex-row gap-4">
-            <button
-              onClick={() => startQuiz()}
-              className="bg-primary text-white px-4 py-2 rounded-md"
-            >
-              Start Quiz
-            </button>
-            {/* <button
-              onClick={() => deleteRow()}
-              className="bg-primary text-white px-4 py-2 rounded-md"
-            >
-              <Trash2 className="w-6 h-6" />
-            </button> */}
-          </div>
-          {/*  <div className="w-80 h-72 border border-gray-400 rounded-sm bg-gray-50 items-center justify-center flex flex-col">
-            <p className="text-md text-fuchsia-500 text-center pt-4">
-              Sulaiman is an Popiah
-            </p>
-            <p className="text-md text-fuchsia-500 text-center pt-4">
-              Zahin is an Bubur Lambuk
-            </p>
-            <p className="text-md text-fuchsia-500 text-center pt-4">
-              Kane is an Kuih Lapis
-            </p>
-            <p className="text-md text-fuchsia-500 text-center pt-4">
-              Lisna is an Murtabak
-            </p>
-          </div> */}
+          <Image
+            src="/pcre_logo.png"
+            alt="Persona Check Ramadan Edition"
+            width={300}
+            height={300}
+            className="w-full h-full max-w-xl"
+          />
+          <Card className="w-full max-w-xl text-balance">
+            <CardHeader>
+              <CardTitle>Wondering What To Do With Your Life?</CardTitle>
+              <CardDescription>
+                Here is a fun quiz that can give you a little bit of insight
+                into your personality and best suited career for you.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-4">
+                <p className=" text-center">
+                  This quiz will help you to find the best career path that
+                  suits you best. Plus the best ramadan food that represents
+                  you!
+                </p>
+                <Button
+                  onClick={() => startQuiz()}
+                  variant="default"
+                  /* className="bg-primary dark:text-black text-white px-4 py-2 rounded-md" */
+                >
+                  Start Quiz
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      )}
-
-      {results ? (
-        <div className="flex flex-col items-center justify-center gap-4 pt-10 px-8 ">
-          <h1 className="text-4xl font-bold">You are a Popiah!</h1>
-          <button
-            onClick={() => userSignout()}
-            className="bg-primary text-white px-4 py-2 rounded-md"
-          >
-            Take Quiz Again
-          </button>
-        </div>
-      ) : (
-        <div></div>
       )}
     </div>
   );

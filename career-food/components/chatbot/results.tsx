@@ -2,9 +2,10 @@
 
 import { signOutAction } from "@/app/actions";
 import { createClient } from "@supabase/supabase-js";
-import { Trash2 } from "lucide-react";
+import { Share2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { Button } from "../ui/button";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "",
@@ -61,10 +62,10 @@ export default function ResultsSection() {
       if (myicon === "Kuih Lapis") {
         setIconImage("/persona/kuihlapis.jpg");
       }
-      if (myicon === "Bubur") {
+      if (myicon === "Bubur Lambuk") {
         setIconImage("/persona/bubur.jpg");
       }
-      if (myicon === "Katira") {
+      if (myicon === "Air Katira") {
         setIconImage("/persona/katira.jpg");
       }
       if (myicon === "Tepung Pelita") {
@@ -82,23 +83,44 @@ export default function ResultsSection() {
   }, [myicon]);
 
   console.log(myicon, iconImage);
+
+  const shareIcon = () => {
+    navigator.clipboard.writeText(iconImage);
+  };
   return (
     <>
-      <h1 className="text-4xl font-bold">You are a {myicon}</h1>
       <Image
-        src={iconImage}
+        src="/pcre_logo.png"
+        alt="Persona Check Ramadan Edition"
+        width={300}
+        height={300}
+        className="max-w-60 h-full -mt-20 "
+      />
+      <p className="text-xl font-bold -mt-10">
+        Your Results Are In! You Are...
+      </p>
+      <Image
+        src={iconImage || "/pcre_logo.png"}
         alt="Food Item"
         className="w-auto h-auto shadow-md rounded-md"
         width={384}
         height={384}
       />
 
-      <button
-        onClick={() => signOutAction()}
-        className="bg-primary text-white px-4 py-2 rounded-md"
-      >
-        Take Quiz Again
-      </button>
+      <div className="flex flex-row gap-2 mx-auto items-center">
+        <Button
+          onClick={() => signOutAction()}
+          className="bg-primary text-white px-4 py-2 rounded-md"
+        >
+          Take Quiz Again
+        </Button>
+        <Button
+          onClick={() => shareIcon()}
+          className="bg-primary text-white px-4 py-2 rounded-md"
+        >
+          <Share2 className="w-6 h-6" />
+        </Button>
+      </div>
       {/* <button
         onClick={() => deleteRow()}
         className="bg-primary text-white px-4 py-2 rounded-md"
@@ -107,7 +129,7 @@ export default function ResultsSection() {
       </button> */}
       <hr></hr>
 
-      <div className="flex flex-col items-center justify-center gap-4 py-20 bg-stone-50">
+      <div className="flex flex-col items-center justify-center gap-8 py-20">
         <h2 className="text-3xl font-bold">All Food Icons</h2>
         <Image
           src="/persona/bubur.jpg"

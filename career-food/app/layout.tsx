@@ -36,10 +36,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={poppins.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="bg-teal-100 text-foreground">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
@@ -66,7 +66,7 @@ export default function RootLayout({
               </nav>
               <div className="flex flex-col gap-20 w-full p-0">{children}</div>
 
-              <footer className="w-full flex flex-col items-center justify-center border-t mx-auto text-center text-xs gap-0 py-2">
+              <footer className="w-full flex flex-col items-center justify-center  mx-auto text-center text-xs gap-0 py-2 ">
                 <p>
                   Powered by{" "}
                   <a
