@@ -146,7 +146,7 @@ export default function ResultsSection() {
       if (myicon === "Tepung Pelita") {
         setIconImage("/persona/pelita.jpg");
       }
-      if (myicon === "martabak") {
+      if (myicon === "Martabak") {
         setIconImage("/persona/martabak.jpg");
       }
       if (myicon === "Soya Cincau") {
