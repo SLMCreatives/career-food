@@ -2,7 +2,7 @@
 
 import { signOutAction } from "@/app/actions";
 import { createClient } from "@supabase/supabase-js";
-import { RefreshCw, Share2, Trash2 } from "lucide-react";
+import { Download, RefreshCw, Share2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
@@ -160,7 +160,7 @@ export default function ResultsSection() {
   };
 
   const handleReset = () => {
-    deleteRow();
+    /* deleteRow(); */
     signOutAction();
   };
   return (
@@ -200,7 +200,7 @@ export default function ResultsSection() {
           size={"icon"}
           /* className="bg-primary text-white px-4 py-2 rounded-md" */
         >
-          <Share2 className="w-6 h-6" />
+          <Download className="w-6 h-6" />
         </Button>
       </div>
 
