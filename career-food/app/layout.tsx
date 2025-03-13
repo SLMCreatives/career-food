@@ -6,6 +6,9 @@ import "./globals.css";
 import Image from "next/image";
 import uqshort from "@/public/uq-logo-short.png";
 import { RefreshButton } from "@/components/refresh";
+import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import { EnvVarWarning } from "@/components/env-var-warning";
+import HeaderAuth from "@/components/chatbot/header-auth";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -13,9 +16,24 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "UNITAR Career/Ramadan Food Finder",
+  title: "Persona Checker: Ramadan Edition",
   description:
-    "The best way to determine your career path and ramadan food that suits you the best."
+    "Find out which Ramadan Food you are and which career you should pursue.",
+  openGraph: {
+    title: "Persona Checker: Ramadan Edition",
+    description:
+      "Find out which Ramadan Food you are and which career you should pursue.",
+    url: defaultUrl,
+    siteName: "Persona Checker: Ramadan Edition",
+    locale: "en-US",
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Persona Checker: Ramadan Edition",
+    description:
+      "Find out which Ramadan Food you are and which career you should pursue."
+  }
 };
 
 const geistSans = Geist({
@@ -59,6 +77,8 @@ export default function RootLayout({
                     </Link>
                   </div>
                   <div className="flex flex-row gap-2">
+                    {/*                     {!hasEnvVars ? <HeaderAuth /> : <HeaderAuth />}
+                     */}{" "}
                     {/*                     <RefreshButton />
                      */}
                     {/*                     <ThemeSwitcher />
@@ -77,7 +97,7 @@ export default function RootLayout({
                     className="font-bold hover:underline"
                     rel="noreferrer"
                   >
-                    UNITAR Quizes
+                    UNITAR Digital Marketing Team
                   </a>{" "}
                   © 2025
                 </p>

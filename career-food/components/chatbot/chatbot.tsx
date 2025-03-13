@@ -1099,7 +1099,7 @@ export default function PersonalityQuiz() {
     }
     if (mbtiType.startsWith("ESTP")) {
       return {
-        food: "Murtabak",
+        food: "Martabak",
         message: "The Entrepreneur"
       };
     }
@@ -1117,7 +1117,7 @@ export default function PersonalityQuiz() {
     }
     if (mbtiType.startsWith("ENTP")) {
       return {
-        food: "Murtabak",
+        food: "Martabak",
         message: "The Debater"
       };
     }
@@ -1179,7 +1179,7 @@ export default function PersonalityQuiz() {
   };
 
   return (
-    <div className="relative min-w-96 max-w-md items-center justify-center">
+    <div className="relative min-w-96 max-w-md items-center justify-center lg:py-6 max-h-[700px]">
       {showNotification && (
         <div className="bg-stone-50 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] drop-shadow-lg">
           <Image
@@ -1214,7 +1214,7 @@ export default function PersonalityQuiz() {
       )}
 
       {showChat && (
-        <div className="bg-stone-100 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] drop-shadow-lg">
+        <div className="bg-stone-100 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] lg:h-[80vh] drop-shadow-lg">
           <div className="flex flex-row gap-4 mx-auto items-center justify-center">
             <Image
               src="/pcre_logo.png"

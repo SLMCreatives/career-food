@@ -44,7 +44,7 @@ export default function StartPage() {
       {start ? (
         <NotificationChatbot />
       ) : (
-        <div className="flex flex-col items-center justify-center gap-4 pt-10 px-8 ">
+        <div className="flex flex-col items-center justify-center gap-4 lg:gap-2 md:pt-10 lg:pt-0 px-8 lg:h-[70vh]">
           <h1 className="text-4xl sr-only font-bold">
             UNITAR Persona Check: Ramadan Edition
           </h1>
@@ -55,13 +55,9 @@ export default function StartPage() {
             height={600}
             className="w-full h-full max-w-xl"
           />
-          <Card className="w-full max-w-xl rounded-lg drop-shadow-xl text-balance">
+          <Card className="w-full max-w-md rounded-lg drop-shadow-xl text-balance">
             <CardHeader>
               <CardTitle>Check Which Career Suits You!</CardTitle>
-              {/* <CardDescription>
-                Here is a fun quiz that can give you a little bit of insight
-                into your personality and best suited career for you.
-              </CardDescription> */}
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4">
