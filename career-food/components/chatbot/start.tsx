@@ -46,7 +46,7 @@ export default function StartPage() {
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 pt-10 px-8 ">
           <h1 className="text-4xl sr-only font-bold">
-            UNITAR Persona Check: Ramadhan Edition
+            UNITAR Persona Check: Ramadan Edition
           </h1>
           <Image
             src="/pcre_logo.png"

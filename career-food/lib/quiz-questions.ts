@@ -2,7 +2,7 @@ import type { Message } from "./types";
 
 export const introMessage: Message = {
   id: Date.now(),
-  text: "Welcome to the most important quiz of your life! (Okay, maybe not the most important, but close enough.)\n\nLet's figure out your personality, ideal career, and—most importantly—the Ramadhan food that defines your soul.\n\nAll you have to do is pick an answer. Easy, right?",
+  text: "Welcome to the most important quiz of your life! (Okay, maybe not the most important, but close enough.)\n\nLet's figure out your personality, ideal career, and—most importantly—the Ramadan food that defines your soul.\n\nAll you have to do is pick an answer. Easy, right?",
   sender: "bot",
   options: [
     {
@@ -20,7 +20,7 @@ export const introMessage: Message = {
 
 export const explainMessage: Message = {
   id: Date.now(),
-  text: "You pick answers, I do all the brain work, and at the end, I tell you your MBTI personality, career match, and your ultimate Ramadhan food twin.\n\nSounds fun, right? Now stop stalling and let's go!",
+  text: "You pick answers, I do all the brain work, and at the end, I tell you your MBTI personality, career match, and your ultimate Ramadan food twin.\n\nSounds fun, right? Now stop stalling and let's go!",
   sender: "bot",
   options: [
     {
