@@ -51,8 +51,8 @@ export default function StartPage() {
           <Image
             src="/pcre_logo.png"
             alt="Persona Check Ramadan Edition"
-            width={300}
-            height={300}
+            width={600}
+            height={600}
             className="w-full h-full max-w-xl"
           />
           <Card className="w-full max-w-xl rounded-lg drop-shadow-xl text-balance">

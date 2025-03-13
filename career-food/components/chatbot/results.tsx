@@ -168,8 +168,8 @@ export default function ResultsSection() {
       <Image
         src="/pcre_logo.png"
         alt="Persona Check Ramadan Edition"
-        width={300}
-        height={300}
+        width={600}
+        height={600}
         className="max-w-60 h-full -mt-20 "
       />
       <p className="text-xl font-bold -mt-10 text-white">
@@ -180,8 +180,8 @@ export default function ResultsSection() {
           src={iconImage || "/pcre_logo.png"}
           alt="Food Item"
           className="w-auto h-auto drop-shadow-lg rounded-lg"
-          width={384}
-          height={384}
+          width={1080}
+          height={1080}
         />
       </div>
 
@@ -218,8 +218,8 @@ export default function ResultsSection() {
                   src={item.image}
                   alt={item.name}
                   className="w-auto h-auto drop-shadow-lg rounded-lg"
-                  width={384}
-                  height={384}
+                  width={1080}
+                  height={1080}
                 />
                 {
                   <p className="text-2xl text-white font-bold">{item.name}</p>
