@@ -63,8 +63,8 @@ export default function StartPage() {
               <div className="flex flex-col gap-4">
                 <p className=" text-center">
                   This quiz will help you to find the best career path that
-                  suits you best. Plus the best ramadan food that represents
-                  you!
+                  suits you best. Plus the best Ramadan Bazaar food that
+                  represents you!
                 </p>
               </div>
             </CardContent>
