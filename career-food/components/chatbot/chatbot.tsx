@@ -1172,7 +1172,7 @@ export default function PersonalityQuiz() {
           console.log("error", error);
         } else {
           console.log("success", data);
-          window.location.href = "/results";
+          window.location.href = "/email";
         }
       }
     }
@@ -1263,7 +1263,6 @@ export default function PersonalityQuiz() {
               disabled
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              /* placeholder="Type a message..." */
               className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none w-3/4"
             />
             <button

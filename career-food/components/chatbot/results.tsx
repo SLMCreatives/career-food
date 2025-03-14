@@ -90,6 +90,7 @@ export default function ResultsSection() {
   const [iconImage, setIconImage] = useState("");
   const [iconSticker, setIconSticker] = useState("");
   const [open, setOpen] = useState(false);
+  const [openEmail, setOpenemail] = useState(false);
 
   const deleteRow = async () => {
     const {
