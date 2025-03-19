@@ -49,9 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={poppins.className} suppressHydrationWarning>
-      {/*       <GoogleTagManager gtmId="G-FHJ2B6CDT9" />
-       */}{" "}
-      <body className="bg-gradient-to-br from-indigo-500 via-blue-500 to-cyan-500 text-foreground ">
+      <body className="bg-background text-foreground ">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -73,14 +71,7 @@ export default function RootLayout({
                       />
                     </Link>
                   </div>
-                  <div className="flex flex-row gap-2">
-                    {/*                     {!hasEnvVars ? <HeaderAuth /> : <HeaderAuth />}
-                     */}{" "}
-                    {/*                     <RefreshButton />
-                     */}
-                    {/*                     <ThemeSwitcher />
-                     */}{" "}
-                  </div>
+                  <div className="flex flex-row gap-2"></div>
                 </div>
               </nav>
               <div className="flex flex-col gap-20 w-full p-0">{children}</div>

@@ -193,17 +193,17 @@ export default function ResultsSection() {
     signOutAction();
   };
   return (
-    <>
-      <Image
-        src="/pcre_logo.png"
-        alt="Persona Check Ramadan Edition"
-        width={600}
-        height={600}
-        className="max-w-60 h-full -mt-20 "
-      />
-      <p className="text-xl font-bold -mt-10 text-white">
-        Your Results Are In!
-      </p>
+    <div className="flex flex-col items-center justify-start gap-8 -mt-10">
+      <div className="flex flex-col gap-2 items-center">
+        <Image
+          src="/new-logo.png"
+          alt="Persona Check Ramadan Edition"
+          width={600}
+          height={600}
+          className="w-48 h-auto"
+        />
+        <p className="text-xl font-bold text-white">Your Results Are In!</p>
+      </div>
       <div className="flex flex-col gap-4 px-4 items-center lg:max-w-xl">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
@@ -272,7 +272,7 @@ export default function ResultsSection() {
       <div className="flex flex-row gap-6 items-center">
         <Button
           onClick={() => handleReset()}
-          variant={"outline"}
+          variant={"default"}
           size={"sm"}
           /* className="bg-primary text-white px-4 py-2 rounded-md" */
         >
@@ -280,7 +280,7 @@ export default function ResultsSection() {
         </Button>
         <Button
           onClick={() => shareIcon()}
-          variant={"outline"}
+          variant={"default"}
           size={"sm"}
           /* className="bg-primary text-white px-4 py-2 rounded-md" */
         >
@@ -342,6 +342,6 @@ export default function ResultsSection() {
             ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

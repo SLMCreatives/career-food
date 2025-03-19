@@ -55,18 +55,28 @@ export default function EmailSubmit() {
         <CardContent>
           <div className="flex flex-col gap-4 items-center w-full">
             <p>Enter your email to view your results!</p>
-            <Input
-              type="text"
-              value={email}
-              required
-              onChange={(e) => setEmail(e.target.value)}
-              onKeyDown={handleKeyDown}
-              /* placeholder="Enter your email address" */
-              className="flex-1 bg-gray-200 text-black text-center rounded-full py-3 px-6 mr-2 focus:outline-none w-full"
-            />
-            <Button onClick={handleEmailSubmit} size={"sm"} variant={"default"}>
-              View Results
-            </Button>
+            <form
+              className="items-center flex flex-col gap-4"
+              action={handleEmailSubmit}
+            >
+              <Input
+                type="email"
+                value={email}
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={handleKeyDown}
+                /* placeholder="Enter your email address" */
+                className="flex-1 bg-gray-200 text-black text-center rounded-full py-3 px-6 mr-2 focus:outline-none w-full"
+              />
+              <Button
+                type="submit"
+                aria-disabled={!email}
+                size={"sm"}
+                variant={"default"}
+              >
+                View Results
+              </Button>
+            </form>
           </div>
         </CardContent>
         <CardFooter className="flex justify-center"></CardFooter>

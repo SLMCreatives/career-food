@@ -36,6 +36,113 @@ export type QuizAnswers = {
   };
 };
 
+interface FoodCharacteristic {
+  name: string;
+  traits: {
+    complex: number; // 1-10 scale: simple to complex
+    traditional: number; // 1-10 scale: modern to traditional
+    sweet: number; // 1-10 scale: savory to sweet
+    social: number; // 1-10 scale: individual to communal
+    preparation: number; // 1-10 scale: quick to elaborate
+    description: string; // Short description of the food
+    mbtiAffinities: string[]; // Primary MBTI types this food resonates with
+  };
+}
+
+const foodDatabase: FoodCharacteristic[] = [
+  {
+    name: "Bubur Lambuk",
+    traits: {
+      complex: 6,
+      traditional: 9,
+      sweet: 3,
+      social: 8,
+      preparation: 7,
+      description:
+        "A comforting, traditional rice porridge that brings people together.",
+      mbtiAffinities: ["ISTJ", "ISFJ", "ESFJ"]
+    }
+  },
+  {
+    name: "Soya Cincau",
+    traits: {
+      complex: 4,
+      traditional: 6,
+      sweet: 7,
+      social: 5,
+      preparation: 4,
+      description:
+        "A refreshing, balanced drink that offers both sweetness and depth.",
+      mbtiAffinities: ["INFJ", "INTP", "ENFJ"]
+    }
+  },
+  {
+    name: "Popiah",
+    traits: {
+      complex: 7,
+      traditional: 8,
+      sweet: 4,
+      social: 6,
+      preparation: 8,
+      description:
+        "A meticulously crafted spring roll with multiple components working in harmony.",
+      mbtiAffinities: ["INTJ", "ISTP"]
+    }
+  },
+  {
+    name: "Kuih Lapis",
+    traits: {
+      complex: 8,
+      traditional: 9,
+      sweet: 8,
+      social: 7,
+      preparation: 9,
+      description:
+        "A beautiful multi-layered cake requiring patience and precision.",
+      mbtiAffinities: ["ISFP", "INFP", "ENFP"]
+    }
+  },
+  {
+    name: "Martabak",
+    traits: {
+      complex: 7,
+      traditional: 7,
+      sweet: 5,
+      social: 8,
+      preparation: 6,
+      description:
+        "A versatile, flavorful stuffed pancake that's both hearty and satisfying.",
+      mbtiAffinities: ["ESTP", "ENTP"]
+    }
+  },
+  {
+    name: "Air Katira",
+    traits: {
+      complex: 5,
+      traditional: 8,
+      sweet: 8,
+      social: 7,
+      preparation: 4,
+      description:
+        "A vibrant, fun, and refreshing drink that stands out in a crowd.",
+      mbtiAffinities: ["ESFP"]
+    }
+  },
+  {
+    name: "Tepung Pelita",
+    traits: {
+      complex: 6,
+      traditional: 9,
+      sweet: 8,
+      social: 6,
+      preparation: 7,
+      description:
+        "A structured, organized dessert with clear layers and boundaries.",
+      mbtiAffinities: ["ESTJ", "ENTJ"]
+    }
+  }
+];
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "",
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
@@ -75,40 +182,57 @@ export default function PersonalityQuiz() {
   useEffect(() => {
     // Start the quiz when chat is opened
     if (showChat) {
-      startQuiz();
+      preQuiz();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showChat]);
 
-  useEffect(() => {
-    if (hitstart) {
-      hitStart();
-    }
-  }, [hitstart]);
-
   const preQuiz = () => {
     const preQuizMessage: Message = {
       id: Date.now(),
-      text: "👋 Hello! I'm your friendly CareerBot. What's your name?",
-      sender: "bot"
+      text: `Hi ${name}! 👋`,
+      sender: "bot",
+      options: [
+        {
+          text: "Hellooo",
+          value: "next",
+          action: () => prestartQuiz()
+        },
+        {
+          text: "*Don't Reply*",
+          value: "stillnext",
+          action: () => prestartQuiz()
+        }
+      ]
     };
-    startQuiz();
     setMessages([preQuizMessage]);
   };
 
-  const hitStart = () => {
-    const intro: Message = {
+  const prestartQuiz = () => {
+    const introMessage: Message = {
       id: Date.now(),
-      text: "In todays faced paced world...bla bla bla",
-      sender: "bot"
+      text: `Welcome to the most important quiz of your life! Okay, maybe not the most important, but close enough.`,
+      sender: "bot",
+      options: [
+        {
+          text: "Not another one!",
+          value: "start-one",
+          action: () => startQuiz()
+        },
+        {
+          text: "Brother Ughh",
+          value: "start-two",
+          action: () => startQuiz()
+        }
+      ]
     };
-    setMessages([intro]);
+    setMessages([introMessage]);
   };
 
   const startQuiz = () => {
     const introMessage: Message = {
       id: Date.now(),
-      text: `Welcome ${name} to the most important quiz of your life! (Okay, maybe not the most important, but close enough.)\n\nLet's figure out your personality, ideal career, and—most importantly—the Ramadan food that defines your soul.\n\nAll you have to do is pick an answer. Easy, right?`,
+      text: `Let's figure out your personality, ideal career, and—most importantly—the Ramadan food that defines your soul.\n\nAll you have to do is pick an answer. Easy, right?`,
       sender: "bot",
       options: [
         {
@@ -129,7 +253,7 @@ export default function PersonalityQuiz() {
   const explainMore = () => {
     const explainMessage: Message = {
       id: Date.now(),
-      text: "You pick answers, I do all the brain work, and at the end, I tell you your MBTI personality, career match, and your ultimate Ramadan food twin.\n\nSounds fun, right? Now stop stalling and let's go!",
+      text: "You pick answers, I do all the brain work, and at the end, I tell you career match, in the form of your ultimate Ramadan food twin.\n\nSounds fun, right? Now stop stalling and let's go!",
       sender: "bot",
       options: [
         {
@@ -820,7 +944,7 @@ export default function PersonalityQuiz() {
           value: "results",
           action: () => {
             setTimeout(() => {
-              getResults();
+              getResultstwo();
             }, 2000);
           }
         }
@@ -889,7 +1013,7 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const valueLetter = value.split("")[0];
+    const valueLetter = value;
 
     console.log(valueLetter);
 
@@ -909,7 +1033,7 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const valueLetter = value.split("")[0];
+    const valueLetter = value;
 
     const { data, error } = await supabase
       .from("users_answers")
@@ -927,7 +1051,7 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const valueLetter = value.split("")[0];
+    const valueLetter = value;
 
     const { data, error } = await supabase
       .from("users_answers")
@@ -945,7 +1069,7 @@ export default function PersonalityQuiz() {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const valueLetter = value.split("")[0];
+    const valueLetter = value;
 
     const { data, error } = await supabase
       .from("users_answers")
@@ -1178,62 +1302,286 @@ export default function PersonalityQuiz() {
     }
   };
 
+  const getResultstwo = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data, error } = await supabase
+      .from("users_answers")
+      .select("*")
+      .eq("user_id", user?.id);
+
+    if (error) {
+      console.log("error", error);
+    } else {
+      // Use the improved matching algorithm
+      const result = await matchPersonalityToFood(data[0]);
+
+      if (result) {
+        const { data, error } = await supabase
+          .from("users_answers")
+          .update({
+            icon: result.food
+            /* mbti_type: result.mbtiType,
+            mbti_description: result.mbtiDescription,
+            food_description: result.description,
+            match_score: result.score.toFixed(1) */
+          })
+          .eq("user_id", user?.id)
+          .select();
+
+        if (error) {
+          console.log("error", error);
+        } else {
+          console.log("success", data);
+          window.location.href = "/email";
+        }
+      }
+    }
+  };
+
+  function calculateDetailedPersonality(answers: any) {
+    // Extract base letters and modifiers
+    const eiBase = answers.q_one.charAt(0);
+    const eiModifier = answers.q_one.length > 1 ? answers.q_one.charAt(1) : "";
+
+    const snBase = answers.q_two.charAt(0);
+    const snModifier = answers.q_two.length > 1 ? answers.q_two.charAt(1) : "";
+
+    const tfBase = answers.q_three.charAt(0);
+    const tfModifier =
+      answers.q_three.length > 1 ? answers.q_three.charAt(1) : "";
+
+    const jpBase = answers.q_four.charAt(0);
+    const jpModifier =
+      answers.q_four.length > 1 ? answers.q_four.charAt(1) : "";
+
+    // Calculate scores on a scale (1-10) for each dimension
+    // Base E/I dimension: E = 1-5, I = 6-10
+    let eiScore = eiBase === "E" ? 3 : 8;
+    if (eiModifier === "-") eiScore = eiBase === "E" ? 5 : 6; // Move toward center
+    if (eiModifier === "+") eiScore = eiBase === "E" ? 1 : 10; // Move toward extreme
+
+    // Base S/N dimension: S = 1-5, N = 6-10
+    let snScore = snBase === "S" ? 3 : 8;
+    if (snModifier === "-") snScore = snBase === "S" ? 5 : 6; // Move toward center
+    if (snModifier === "+") snScore = snBase === "S" ? 1 : 10; // Move toward extreme
+
+    // Base T/F dimension: T = 1-5, F = 6-10
+    let tfScore = tfBase === "T" ? 3 : 8;
+    if (tfModifier === "-") tfScore = tfBase === "T" ? 5 : 6; // Move toward center
+    if (tfModifier === "+") tfScore = tfBase === "T" ? 1 : 10; // Move toward extreme
+
+    // Base J/P dimension: J = 1-5, P = 6-10
+    let jpScore = jpBase === "J" ? 3 : 8;
+    if (jpModifier === "-") jpScore = jpBase === "J" ? 5 : 6; // Move toward center
+    if (jpModifier === "+") jpScore = jpBase === "J" ? 1 : 10; // Move toward extreme
+
+    return {
+      eiScore, // Extroversion (low) vs Introversion (high)
+      snScore, // Sensing (low) vs Intuition (high)
+      tfScore, // Thinking (low) vs Feeling (high)
+      jpScore, // Judging (low) vs Perceiving (high)
+      mbtiType: `${eiBase}${snBase}${tfBase}${jpBase}` // Base MBTI type
+    };
+  }
+
+  // Function to calculate career preference scores
+  function calculateCareerPreferences(careerAnswers: any) {
+    // Environment preferences
+    let structureScore = 5; // Default mid-point
+    if (careerAnswers.environment === "structured") structureScore = 9;
+    else if (careerAnswers.environment === "creative") structureScore = 3;
+    else if (careerAnswers.environment === "fast-paced") structureScore = 7;
+    else if (careerAnswers.environment === "active") structureScore = 5;
+
+    // Passion preferences - converted to a social orientation score
+    let socialScore = 5; // Default mid-point
+    if (careerAnswers.passion === "helping") socialScore = 9;
+    else if (careerAnswers.passion === "creating") socialScore = 6;
+    else if (careerAnswers.passion === "solving") socialScore = 3;
+    else if (careerAnswers.passion === "business") socialScore = 7;
+
+    // Strength preferences - converted to a complexity preference
+    let complexityScore = 5; // Default mid-point
+    if (careerAnswers.strength === "logical") complexityScore = 7;
+    else if (careerAnswers.strength === "creativity") complexityScore = 8;
+    else if (careerAnswers.strength === "practical") complexityScore = 4;
+    else if (careerAnswers.strength === "communication") complexityScore = 6;
+
+    // Industry preferences - used to weight traditional vs modern
+    let traditionalScore = 5; // Default mid-point
+    if (careerAnswers.industry === "business") traditionalScore = 6;
+    else if (careerAnswers.industry === "tech") traditionalScore = 3;
+    else if (careerAnswers.industry === "psychology") traditionalScore = 5;
+    else if (careerAnswers.industry === "arts") traditionalScore = 4;
+    else if (careerAnswers.industry === "engineering") traditionalScore = 7;
+    else if (careerAnswers.industry === "education") traditionalScore = 8;
+    else if (careerAnswers.industry === "hospitality") traditionalScore = 7;
+
+    return {
+      structureScore,
+      socialScore,
+      complexityScore,
+      traditionalScore
+    };
+  }
+
+  // The main function to match personality to food
+  async function matchPersonalityToFood(userData: any) {
+    // Get personality scores
+    const personality = calculateDetailedPersonality(userData);
+
+    // Get career preference scores
+    const career = calculateCareerPreferences({
+      environment: userData.q_five,
+      passion: userData.q_six,
+      strength: userData.q_seven,
+      industry: userData.q_eight
+    });
+
+    // Calculate compatibility scores for each food
+    const foodScores = foodDatabase.map((food) => {
+      // Check if this food has a direct MBTI affinity with the user's type
+      const mbtiAffinityBonus = food.traits.mbtiAffinities.includes(
+        personality.mbtiType
+      )
+        ? 10
+        : 0;
+
+      // Calculate trait compatibility scores
+
+      // Introversion/Extroversion affects social score
+      // Low EI (extrovert) matches with high social foods
+      const socialCompatibility =
+        10 - Math.abs(career.socialScore - food.traits.social);
+
+      // Sensing/Intuition affects complexity score
+      // High SN (intuitive) matches with more complex foods
+      const complexityCompatibility =
+        10 - Math.abs(career.complexityScore - food.traits.complex);
+
+      // Thinking/Feeling affects sweet/savory preference
+      // High TF (feeling) matches with sweeter foods
+      const sweetCompatibility =
+        10 - Math.abs(personality.tfScore - food.traits.sweet);
+
+      // Judging/Perceiving affects preparation score
+      // Low JP (judging) matches with more elaborate preparation
+      const preparationCompatibility =
+        10 - Math.abs(11 - personality.jpScore - food.traits.preparation);
+
+      // Career structure preference affects traditional score
+      const traditionalCompatibility =
+        10 - Math.abs(career.traditionalScore - food.traits.traditional);
+
+      // Calculate weighted total score
+      const totalScore =
+        mbtiAffinityBonus * 1.5 + // Direct MBTI match is highly weighted
+        socialCompatibility * 1.0 +
+        complexityCompatibility * 1.0 +
+        sweetCompatibility * 0.8 +
+        preparationCompatibility * 0.7 +
+        traditionalCompatibility * 0.5;
+
+      return {
+        food: food.name,
+        description: food.traits.description,
+        score: totalScore,
+        mbtiType: personality.mbtiType,
+        mbtiDescription: getMBTIDescription(personality.mbtiType)
+      };
+    });
+
+    // Sort foods by score and get the top match
+    const sortedFoods = foodScores.sort((a, b) => b.score - a.score);
+    return sortedFoods[0]; // Return the best match
+  }
+
+  // Helper function to get MBTI descriptions
+  function getMBTIDescription(type: string): string {
+    const descriptions: { [key: string]: string } = {
+      ISTJ: "The Inspector",
+      ISFJ: "The Defender",
+      INFJ: "The Advocate",
+      INTJ: "The Mastermind",
+      ISTP: "The Virtuoso",
+      ISFP: "The Composer",
+      INFP: "The Mediator",
+      INTP: "The Thinker",
+      ESTP: "The Entrepreneur",
+      ESFP: "The Entertainer",
+      ENFP: "The Campaigner",
+      ENTP: "The Debater",
+      ESTJ: "The Executive",
+      ESFJ: "The Counselor",
+      ENFJ: "The Protagonist",
+      ENTJ: "The Commander"
+    };
+
+    return descriptions[type] || "The Personality";
+  }
   return (
     <div className="relative min-w-96 max-w-md items-center justify-center lg:py-6 max-h-[700px]">
       {showNotification && (
-        <div className="bg-stone-50 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] drop-shadow-lg">
-          <Image
-            src="/pcre_logo.png"
-            alt="Persona Check Ramadan Edition"
-            width={300}
-            height={300}
-            className="max-w-52 h-auto -mt-4 mx-auto mb-auto"
-          />
-          <div className="hidden font-bold text-xl pb-4">👷 Persona Check</div>
-
-          <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
-            <p>To start the quiz, just type your name and click send!</p>
-          </div>
-          <div className="flex items-center w-full">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Type your name..."
-              className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none w-3/4"
+        <div className="bg-transparent dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] gap-4 justify-between drop-shadow-lg">
+          <div className="w-full">
+            <Image
+              src="/new-logo.png"
+              alt="Persona Check Ramadan Edition"
+              width={300}
+              height={300}
+              className="max-w-52 h-auto mx-auto py-4 mb-10"
             />
-            <button
-              onClick={handleOpenChat}
-              className="bg-orange-300 text-black rounded-full p-3"
-            >
-              <Send size={16} />
-            </button>
+          </div>
+          <div className="flex flex-col gap-4 justify-end">
+            <div className="bg-gray-200 text-black rounded-md py-4 px-6 mb-4  text-left mr-12">
+              <p>To start the quiz, just type your name and click send!</p>
+            </div>
+            <div className="flex items-center w-full">
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Type your name..."
+                className="flex-1 bg-gray-200 text-black rounded-full py-3 px-6 mr-2  focus:outline-none w-3/4"
+              />
+              <button
+                onClick={handleOpenChat}
+                className="bg-orange-300 text-black rounded-full p-3"
+              >
+                <Send size={16} />
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {showChat && (
-        <div className="bg-stone-100 dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] lg:h-[80vh] drop-shadow-lg">
-          <div className="flex flex-row gap-4 mx-auto items-center justify-center">
+        <div className="bg-transparent dark:bg-slate-800 text-white rounded-3xl p-6 mx-auto w-full overflow-hidden flex flex-col h-[680px] gap-4 justify-between drop-shadow-lg">
+          <div className="w-full">
             <Image
-              src="/pcre_logo.png"
+              src="/new-logo.png"
               alt="Persona Check Ramadan Edition"
               width={300}
               height={300}
-              className="max-w-52 h-auto -mt-4 mx-auto mb-auto"
+              className="max-w-52 h-auto mx-auto py-4 -mb-4"
             />
           </div>
-          <div className="hidden font-bold text-xl pb-4">👷 Persona Check</div>
-          <div className="flex-1 overflow-y-auto mb-4 space-y-4">
+          <div className="flex flex-col min-h-[520px] overflow-y-auto space-y-4">
             {messages.map((message) => (
-              <div key={message.id} className="flex flex-col gap-2">
+              <div
+                key={message.id}
+                className="flex flex-col gap-2 justify-between h-full"
+              >
                 <div
                   className={`${
                     message.sender === "user"
-                      ? "bg-emerald-200 border border-emerald-300 text-black ml-12 text-right"
-                      : "bg-stone-200 border border-stone-200 text-black mr-12 text-left text-pretty whitespace-pre-wrap"
-                  } rounded-lg py-3 px-4 text-sm`}
+                      ? "bg-emerald-200 border border-emerald-300 text-black ml-12 text-right rounded-br-none"
+                      : "bg-stone-200 border border-stone-200 text-black mr-12 text-left text-pretty whitespace-pre-wrap rounded-bl-none"
+                  } rounded-xl py-3 px-4 text-sm`}
                 >
                   {message.text}
                 </div>
@@ -1256,7 +1604,7 @@ export default function PersonalityQuiz() {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="flex items-center w-full">
+          {/* <div className="flex items-center w-full">
             <input
               type="text"
               value={input}
@@ -1271,16 +1619,9 @@ export default function PersonalityQuiz() {
             >
               <Send size={16} />
             </button>
-          </div>
+          </div> */}
         </div>
       )}
-
-      {/*  <button
-        onClick={Results}
-        className="bg-pink-200 text-black rounded-full py-3 px-6 mb-3 hover:font-bold hover:bg-pink-400 transition-colors duration-300 ease-in-out"
-      >
-        Get My Results
-      </button> */}
     </div>
   );
 }
