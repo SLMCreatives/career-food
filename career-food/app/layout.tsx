@@ -3,7 +3,7 @@ import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
 import Image from "next/image";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -49,7 +49,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={poppins.className} suppressHydrationWarning>
-      <GoogleTagManager gtmId="G-FHJ2B6CDT9" />
+      {/*       <GoogleTagManager gtmId="G-FHJ2B6CDT9" />
+       */}{" "}
       <body className="bg-gradient-to-br from-indigo-500 via-blue-500 to-cyan-500 text-foreground ">
         <ThemeProvider
           attribute="class"
@@ -102,6 +103,7 @@ export default function RootLayout({
           </main>
         </ThemeProvider>
       </body>
+      <GoogleAnalytics gaId="G-FHJ2B6CDT9" />
     </html>
   );
 }
