@@ -100,7 +100,7 @@ export default function StartPage() {
           <h1 className="text-4xl sr-only font-bold">
             UNITAR Persona Check: Ramadan Edition
           </h1>
-          <div className="flex flex-col gap-4 py-32">
+          <div className="flex flex-col gap-4 py-32 items-center">
             <Image
               src="/new-logo.png"
               alt="Persona Check Ramadan Edition"

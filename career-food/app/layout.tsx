@@ -77,7 +77,7 @@ export default function RootLayout({
               </nav>
               <div className="flex flex-col gap-20 w-full p-0">{children}</div>
 
-              <footer className="w-full flex flex-col items-center justify-center  mx-auto text-center text-white text-xs gap-0 py-2">
+              <footer className="w-full flex flex-col items-center justify-center  mx-auto text-center text-black text-xs gap-0 py-2">
                 <p>
                   Powered by{" "}
                   <a
@@ -86,7 +86,7 @@ export default function RootLayout({
                     className="font-bold hover:underline"
                     rel="noreferrer"
                   >
-                    UNITAR Digital Marketing Team
+                    UNITAR Education Group
                   </a>{" "}
                   © 2025
                 </p>

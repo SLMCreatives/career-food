@@ -14,6 +14,7 @@ import {
   CardTitle
 } from "../ui/card";
 import { Input } from "../ui/input";
+import { z } from "zod";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "",
@@ -22,6 +23,13 @@ const supabase = createClient(
 
 export default function EmailSubmit() {
   const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const mySchema = z.object({
+    email: z.string().email()
+  });
+
   const viewResults = async () => {
     redirect("/results");
   };
@@ -36,6 +44,9 @@ export default function EmailSubmit() {
     const {
       data: { user }
     } = await supabase.auth.getUser();
+
+    // Validate email
+
     const { data, error } = await supabase
       .from("users_answers")
       .update({ email: email })
@@ -81,6 +92,25 @@ export default function EmailSubmit() {
         </CardContent>
         <CardFooter className="flex justify-center"></CardFooter>
       </Card>
+      {/*  {{error && <div style={{ color: "red" }}>{error}</div>}
+      <form onSubmit={handleEmailSubmit}>
+        <Input
+          type="email"
+          value={email}
+          required
+          onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="flex-1 bg-gray-200 text-black text-center rounded-full py-3 px-6 mr-2 focus:outline-none w-full"
+        />
+        <Button
+          type="submit"
+          aria-disabled={!email}
+          size={"sm"}
+          variant={"default"}
+        >
+          {isLoading ? "Loading..." : "Submit"}
+        </Button>
+      </form>} */}
     </div>
   );
 }

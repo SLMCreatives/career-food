@@ -4,7 +4,7 @@ import { signOutAction } from "@/app/actions";
 import { createClient } from "@supabase/supabase-js";
 import { Download, RefreshCw, Share2, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "../ui/button";
 import FileSaver, { saveAs } from "file-saver";
 import {
@@ -34,6 +34,7 @@ import {
   LinkedinShareButton,
   LinkedinIcon
 } from "next-share";
+import Loading from "../loading";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "",
@@ -207,14 +208,16 @@ export default function ResultsSection() {
       <div className="flex flex-col gap-4 px-4 items-center lg:max-w-xl">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Image
-              src={iconImage || "/pcre_logo.png"}
-              alt="Food Item"
-              className="w-auto h-auto drop-shadow-lg rounded-lg hover:drop-shadow-2xl lg:hover:scale-110 transition-all duration-300 ease-in-out"
-              width={1080}
-              height={1080}
-              loading="eager"
-            />
+            <Suspense fallback={<Loading />}>
+              <Image
+                src={iconImage || "/new-logo.png"}
+                alt="Food Item"
+                className="w-auto h-auto drop-shadow-lg rounded-lg hover:drop-shadow-2xl lg:hover:scale-110 transition-all duration-300 ease-in-out"
+                width={1080}
+                height={1080}
+                loading="eager"
+              />
+            </Suspense>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
