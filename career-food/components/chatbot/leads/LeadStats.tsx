@@ -60,7 +60,12 @@ export function LeadStats({
               {item.name}
             </dt>
             <dd className="mt-2 flex items-baseline space-x-2.5">
-              <span className="text-5xl font-semibold text-foreground">
+              <span
+                className={cn(
+                  item.name !== "Total Leads" ? "text-3xl" : "text-5xl",
+                  "font-semibold text-foreground"
+                )}
+              >
                 {item.stat}
               </span>
               <span
