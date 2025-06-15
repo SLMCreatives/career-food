@@ -46,6 +46,7 @@ export default function Dashboard() {
         .select("*")
         .gte("created_at", "2025-06-14T00:00:00.000Z")
         .lte("created_at", "2025-06-14T05:59:59.999Z")
+        .not("email", "is", null)
         .order("created_at", { ascending: false });
 
       if (error) {
