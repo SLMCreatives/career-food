@@ -4,6 +4,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { supabaseAdmin } from "@/lib/supabase";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -132,3 +133,78 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/");
 };
+
+type UserAnswerRecord = {
+  id: string;
+  created_at: string;
+  user_id: string;
+  user_name: string;
+  q_one: string;
+  q_two: string;
+  q_three: string;
+  q_four: string;
+  q_five: string;
+  q_six: string;
+  q_seven: string;
+  q_eight: string;
+  icon: string;
+  email: string;
+};
+
+/**
+ * Server Action to upload records to a specified Supabase table.
+ * This function runs on the server and securely interacts with your Supabase database.
+ * @param table The name of the Supabase table to insert records into.
+ * @param records An array of records to insert.
+ * @returns An object indicating success or failure, with a message and data/error details.
+ */
+export async function uploadRecords(
+  table: string,
+  records: UserAnswerRecord[]
+) {
+  try {
+    const { data, error } = await supabaseAdmin.from(table).insert(records);
+
+    if (error) {
+      console.log("Supabase insert error:", error.message);
+      return { success: false, message: error.message };
+    }
+
+    return { success: true, data };
+  } catch (error: any) {
+    console.log("Server action error:", error.message);
+    return { success: false, message: error.message };
+  }
+}
+
+type sgsLeaders = {
+  name: string;
+  nickname: string;
+  referrals: number;
+  bounty: number;
+  title: string;
+  weekly: {
+    w1: number;
+    w2: number;
+    w3: number;
+    w4: number;
+  };
+};
+
+export async function uploadsgsRecords(table: string, records: sgsLeaders[]) {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from(table)
+      .upsert(records, { onConflict: "nickname" });
+
+    if (error) {
+      console.log("Supabase insert error:", error.message);
+      return { success: false, message: error.message };
+    }
+
+    return { success: true, data };
+  } catch (error: any) {
+    console.log("Server action error:", error.message);
+    return { success: false, message: error.message };
+  }
+}
