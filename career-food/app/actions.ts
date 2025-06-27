@@ -180,15 +180,12 @@ export async function uploadRecords(
 type sgsLeaders = {
   name: string;
   nickname: string;
-  referrals: number;
-  bounty: number;
+  total_bounty: number;
   title: string;
-  weekly: {
-    w1: number;
-    w2: number;
-    w3: number;
-    w4: number;
-  };
+  online: number;
+  conventional: number;
+  bounty_o: number;
+  bounty_c: number;
 };
 
 export async function uploadsgsRecords(table: string, records: sgsLeaders[]) {

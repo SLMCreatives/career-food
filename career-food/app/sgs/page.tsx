@@ -69,7 +69,7 @@ export default function DataDashboard() {
       const { data, error } = await supabase
         .from("sgsleads")
         .select("*")
-        .order("bounty", { ascending: false });
+        .order("total_bounty", { ascending: false });
 
       if (error) {
         console.error("Error fetching leads:", error);
@@ -83,8 +83,12 @@ export default function DataDashboard() {
 
   const leaderboardData = leads.map((lead) => ({
     nickname: lead.nickname,
-    referrals: lead.referrals,
-    bounty: lead.bounty,
+    name: lead.name,
+    total_bounty: lead.total_bounty,
+    online: lead.online,
+    conventional: lead.conventional,
+    bounty_o: lead.bounty_o,
+    bounty_c: lead.bounty_c,
     title: lead.title
   }));
   const topThree = leaderboardData.slice(0, 3);
@@ -147,7 +151,7 @@ export default function DataDashboard() {
                   {topThree[1]?.title}
                 </span>
                 <span className="text-lg text-gray-500 dark:text-gray-200">
-                  RM {topThree[1]?.bounty}
+                  RM {topThree[1]?.total_bounty}
                 </span>
               </div>
 
@@ -174,7 +178,7 @@ export default function DataDashboard() {
                   {topThree[0]?.title}
                 </span>
                 <span className="text-2xl text-gray-500 dark:text-yellow-400 animate-pulse animate-2s_ease-in-out_infinite">
-                  RM {topThree[0]?.bounty}
+                  RM {topThree[0]?.total_bounty}
                 </span>
               </div>
 
@@ -200,7 +204,7 @@ export default function DataDashboard() {
                   {topThree[2]?.title}
                 </span>
                 <span className="text-lg text-gray-500 dark:text-gray-200">
-                  RM {topThree[2]?.bounty}
+                  RM {topThree[2]?.total_bounty}
                 </span>
               </div>
             </div>
@@ -250,7 +254,7 @@ export default function DataDashboard() {
                     className={`text-md font-thin "text-gray-500 dark:text-white
                     `}
                   >
-                    RM {entry.bounty}
+                    RM {entry.total_bounty}
                   </span>
                 </div>
               ))}

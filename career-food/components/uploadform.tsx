@@ -23,15 +23,12 @@ import {
 type sgsLeaders = {
   name: string;
   nickname: string;
-  referrals: number;
-  bounty: number;
+  total_bounty: number;
   title: string;
-  weekly: {
-    w1: number;
-    w2: number;
-    w3: number;
-    w4: number;
-  };
+  online: number;
+  conventional: number;
+  bounty_o: number;
+  bounty_c: number;
 };
 
 export default function UploadForm() {
@@ -117,27 +114,25 @@ export default function UploadForm() {
       <Card>
         <CardHeader>
           <CardTitle>
-            <h2 className="text-2xl font-bold">Upload .xlsx file</h2>
+            <h2 className="text-2xl font-bold">.xlsx Format</h2>
           </CardTitle>
-          <CardDescription>
-            <p className="text-black dark:text-muted-foreground text-sm italic">
-              Only accepts .xlsx file. Must follow the following format.
-            </p>
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Use these headings. All lower caps.</p>
-          <ul className="text-xs list-disc list-inside">
-            <li>name </li>
-            <li>nickname</li>
-            <li>referrals</li>
-            <li>bounty</li>
-            <li>title</li>
-            <li>w1</li>
-            <li>w2</li>
-            <li>w3</li>
-            <li>w4</li>
+          <p> Only accepts .xlsx file. Must use these exact headers:</p>
+          <ul className="text-xs list-disc list-inside columns-2">
+            <li>name (text)</li>
+            <li>nickname* (text)</li>
+            <li>title (text)</li>
+            <li>online (number)</li>
+            <li>conventional (number)</li>
+            <li>bounty_o (number)</li>
+            <li>bounty_c (number)</li>
+            <li>total_bounty (number)</li>
           </ul>
+          <p className="text-xs italic text-black/40 dark:text-muted-foreground mt-2">
+            *Must be unique, no space, no special characters, no caps & no
+            edits.
+          </p>
         </CardContent>
         <CardFooter>
           <Button variant="default" className="w-full" onClick={handleDownload}>
