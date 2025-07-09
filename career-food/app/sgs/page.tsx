@@ -95,7 +95,7 @@ export default function DataDashboard() {
   const restOfLeaderboard = leaderboardData.slice(3, 9);
 
   return (
-    <main className="p-4 lg:p-8 space-y-6 absolute inset-0 overflow-y-auto bg-white dark:bg-slate-900">
+    <main className="p-4 lg:p-8 space-y-6 absolute inset-0 overflow-y-auto bg-gradient-to-b from-[#0f1c3a]  via-[#1c3367] to-[#0f1c3a]">
       <div className="flex gap-4 justify-end w-full fixed bottom-4 right-4">
         <ThemeSwitcher />
         <Dialog>
@@ -112,43 +112,42 @@ export default function DataDashboard() {
         </Button> */}
       </div>
       <div className="flex max-w-lg items-start justify-center mx-auto">
-        <Card className="w-full overflow-hidden rounded-3xl bg-white shadow-lg dark:bg-slate-800">
-          <div className="flex items-center justify-center p-4">
+        <div className="w-full overflow-hidden">
+          <div className="flex items-center justify-center px-4">
             <Image
               src="/UIU_logo.png"
               alt="UNITAR"
               width={200}
               height={200}
-              className="w-10 h-10 mr-4"
+              className="w-6 h-6 mr-4"
             />
-            <h1 className="text-3xl font-black text-gray-900 dark:text-white">
-              SGS Leaderboard
+            <h1 className="text-2xl tracking-wider font-serif text-gray-900 dark:text-white">
+              UNITAR
             </h1>
-            <div className="w-6" /> {/* Placeholder for alignment */}
+          </div>
+          <div className="w-full py-4 px-4 flex flex-col items-center justify-center text-white text-center gap-2">
+            <p className="text-4xl font-bold">SGS Leaderboard</p>
+            <p className="text-sm">Bring a Buddy, Clain Your Bounty</p>
           </div>
 
-          <div className="relative flex flex-col items-center justify-center space-y-4 bg-gradient-to-b from-[#F0F2F5] to-white p-4 dark:from-gray-700 dark:to-gray-800">
+          <div className="relative flex flex-col items-center justify-center space-y-4">
             <div className="grid grid-cols-3  w-full items-end justify-around pt-4">
               {/* Second Place */}
               <div className="relative flex flex-col items-center">
-                <div className="absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-[#C0C0C0] px-2 py-0.5 text-md font-bold text-black shadow-md">
-                  2
-                </div>
-                <Avatar className="h-20 w-20 border-2 border-[#C0C0C0] shadow-md rounded-full">
-                  <AvatarImage
-                    src={"/placeholder.jpg"}
+                <div className="h-24 w-24 border-2 border-[#b7f7ff] rounded-xl bg-transparent shadow-lg shadow-blue-500 flex items-center justify-center -skew-x-12 translate-x-2">
+                  <Image
+                    src="/rank.png"
                     alt={topThree[1]?.nickname}
-                    className="rounded-full object-cover object-center"
+                    width={80}
+                    height={80}
+                    className="rounded-xl object-cover object-center p-4 skew-x-12"
                   />
-                  <AvatarFallback>
-                    {topThree[1]?.nickname.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="mt-2 text-lg font-medium text-gray-900 dark:text-gray-50">
+                </div>
+                <span className="-mt-2 text-md tracking-tight px-3 rounded-sm text-blue-900 bg-blue-100 uppercase font-bold z-20">
                   {topThree[1]?.nickname}
                 </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 italic">
-                  {topThree[1]?.title}
+                <span className="mt-2 text-sm text-gray-500 dark:text-gray-300 italic">
+                  Legendary
                 </span>
                 <span className="text-lg text-gray-500 dark:text-gray-200">
                   RM {topThree[1]?.total_bounty}
@@ -157,25 +156,20 @@ export default function DataDashboard() {
 
               {/* First Place */}
               <div className="relative flex flex-col items-center">
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-yellow-400 px-2 py-2 text-xs font-bold text-white dark:text-black shadow-md">
-                  <Crown className="h-4 w-4" />
-                </div>
-                <Avatar className="h-24 w-24 border-2 border-yellow-400 shadow-2xl rounded-full">
-                  <AvatarImage
-                    src={"/placeholder.jpg"}
-                    alt={topThree[0]?.nickname}
-                    className="rounded-full object-cover object-center"
+                <div className="h-[6.5rem] w-[6.5rem] border-2 border-[#b7f7ff] rounded-xl bg-transparent shadow-lg shadow-blue-500 flex items-center justify-center -skew-x-12 translate-x-2">
+                  <Image
+                    src="/rank.png"
+                    alt={topThree[1]?.nickname}
+                    width={100}
+                    height={100}
+                    className="rounded-xl object-cover object-center p-4 skew-x-12"
                   />
-                  <AvatarFallback>
-                    {topThree[0]?.nickname.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="mt-2 text-xl font-semibold text-gray-900 dark:text-yellow-400 flex flex-row gap-1 items-center">
-                  <Award className="h-6 w-6 -ml-4" />
+                </div>
+                <span className="-mt-2 text-xl tracking-tight px-3 rounded-sm text-blue-900 bg-blue-100 uppercase font-bold z-20">
                   {topThree[0]?.nickname}
                 </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 italic">
-                  {topThree[0]?.title}
+                <span className="mt-2 text-md text-gray-500 dark:text-gray-300 italic">
+                  Mythic
                 </span>
                 <span className="text-2xl text-gray-500 dark:text-yellow-400 animate-pulse animate-2s_ease-in-out_infinite">
                   RM {topThree[0]?.total_bounty}
@@ -184,24 +178,21 @@ export default function DataDashboard() {
 
               {/* Third Place */}
               <div className="relative flex flex-col items-center">
-                <div className="absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-[#CD7F32] px-2 py-0.5 text-sm font-bold text-black shadow-md">
-                  3
-                </div>
-                <Avatar className="h-20 w-20 border-2 border-[#CD7F32] shadow-md rounded-full">
-                  <AvatarImage
-                    src={"/placeholder.jpg"}
-                    alt={topThree[2]?.nickname}
-                    className="rounded-full object-cover object-center"
+                <div className="h-[6rem] w-[6rem] border-2 border-[#b7f7ff] rounded-xl bg-transparent shadow-lg shadow-blue-500 flex items-center justify-center -skew-x-12 translate-x-2">
+                  <Image
+                    src="/rank.png"
+                    alt={topThree[1]?.nickname}
+                    width={80}
+                    height={80}
+                    className="rounded-xl object-cover object-center p-4 skew-x-12"
                   />
-                  <AvatarFallback>
-                    {topThree[2]?.nickname.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="mt-2 text-lg font-medium text-gray-900 dark:text-gray-50">
+                </div>
+                <span className="-mt-2 text-md tracking-tight px-3 rounded-sm text-blue-900 bg-blue-100 uppercase font-bold z-20">
                   {topThree[2]?.nickname}
                 </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 italic">
-                  {topThree[2]?.title}
+                <span className="mt-2 text-sm text-gray-500 dark:text-gray-300 italic">
+                  Elite
+                  {/* {topThree[2]?.title} */}
                 </span>
                 <span className="text-lg text-gray-500 dark:text-gray-200">
                   RM {topThree[2]?.total_bounty}
@@ -210,45 +201,51 @@ export default function DataDashboard() {
             </div>
           </div>
 
-          <ScrollArea className="min-h-[300px] p-4">
-            <div className="space-y-2">
+          <ScrollArea className="min-h-[300px] p-4 pt-6">
+            <div className="flex flex-row items-center justify-between px-4 pb-2 text-xs italic text-gray-300">
+              <p>No.</p>
+              <p className="-ml-28">Nickname</p>
+              <p>Bounty*</p>
+            </div>
+            <div className="space-y-5">
               {restOfLeaderboard.map((entry, index) => (
                 <div
                   key={index}
-                  className={`flex items-center justify-between rounded-xl p-3 py-2 ${
+                  className={`flex items-center justify-between rounded-xl p-3 py-1 border border-blue-100/50 ${
                     index % 2 === 0
-                      ? "bg-slate-200 dark:bg-slate-800"
-                      : "bg-white dark:bg-slate-700"
+                      ? "bg-slate-200 dark:bg-transparent"
+                      : "bg-white dark:bg-transparent"
                   }`}
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 relative">
                     <span
-                      className={`w-6 text-center text-sm font-medium $"text-gray-500 dark:text-gray-400"
+                      className={`w-6 text-center text-sm font-medium $"text-gray-500 dark:text-gray-300"
                       `}
                     >
                       {index + 4}
                     </span>
-                    <Avatar className="h-9 w-9 rounded-full">
-                      <AvatarImage
-                        src={"/placeholder.jpg"}
-                        alt={entry.nickname}
-                        className="rounded-full object-cover object-center"
+                    <div className="h-14 w-14 border border-[#b7f7ff] bg-blue-950 shadow-md shadow-blue-500 rounded-xl absolute left-7 flex items-center justify-center -skew-x-12">
+                      <Image
+                        src="/rank.png"
+                        alt={topThree[1]?.nickname}
+                        width={80}
+                        height={80}
+                        className="rounded-xl object-cover object-center p-2 skew-x-12"
                       />
-                      <AvatarFallback>
-                        {entry.nickname.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span
-                      className={`text-md font-medium text-gray-900 dark:text-gray-50`}
-                    >
-                      {" "}
-                      {entry.nickname}
-                    </span>
-                    <span
-                      className={`text-xs text-gray-500 dark:text-gray-400`}
-                    >
-                      {entry.title}
-                    </span>
+                    </div>
+                    <div className="flex flex-col gap-0 pl-20">
+                      <span
+                        className={`text-sm tracking-tight rounded-sm text-blue-100 uppercase font-bold`}
+                      >
+                        {" "}
+                        {entry.nickname}
+                      </span>
+                      <span
+                        className={`-mt-1 text-xs text-gray-500 dark:text-gray-300`}
+                      >
+                        {entry.title}
+                      </span>
+                    </div>
                   </div>
                   <span
                     className={`text-md font-thin "text-gray-500 dark:text-white
@@ -260,10 +257,10 @@ export default function DataDashboard() {
               ))}
             </div>
           </ScrollArea>
-        </Card>
+        </div>
       </div>
-      <div className="flex flex-row max-w-lg items-start justify-center mx-auto px-6">
-        <p className="text-xs italic text-gray-500 dark:text-gray-400">
+      <div className="flex flex-row max-w-lg items-start justify-center text-balance mx-auto px-2">
+        <p className="text-[10px] italic text-gray-500 dark:text-gray-300">
           *Bounty shown are estimated count and does not reflect the actual
           incentive amount. Please refer to the{" "}
           <span className="underline text-blue-600 dark:text-blue-400">
@@ -278,6 +275,17 @@ export default function DataDashboard() {
           height={100}
           className="w-16 h-16"
         />
+      </div>
+      <div className="flex flex-row items-center justify-between space-x-2 max-w-lg mx-auto px-2">
+        <Link
+          href="https://www.unitar.my"
+          className="text-sm text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+        >
+          unitar.my
+        </Link>
+        <p className="text-sm text-gray-500 dark:text-gray-300">
+          #ACCELERATEYourFuture
+        </p>
       </div>
     </main>
   );
