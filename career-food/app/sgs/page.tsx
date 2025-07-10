@@ -95,7 +95,7 @@ export default function DataDashboard() {
   const restOfLeaderboard = leaderboardData.slice(3, 9);
 
   return (
-    <main className="p-4 lg:p-8 space-y-6 absolute inset-0 overflow-y-auto bg-gradient-to-b from-[#0f1c3a]  via-[#1c3367] to-[#0f1c3a]">
+    <main className="space-y-6 absolute inset-0 overflow-y-auto bg-gradient-to-b from-[#0f1c3a]  via-[#1c3367] to-[#0f1c3a]">
       <div className="flex gap-4 justify-end w-full fixed bottom-4 right-4">
         <ThemeSwitcher />
         <Dialog>
@@ -111,9 +111,9 @@ export default function DataDashboard() {
           <Link href="/sgs/upload">+</Link>
         </Button> */}
       </div>
-      <div className="flex max-w-lg items-start justify-center mx-auto">
+      <div className="flex max-w-lg items-start justify-center mx-auto ">
         <div className="w-full overflow-hidden">
-          <div className="flex items-center justify-center px-4">
+          <div className="items-center justify-center px-4 flex">
             <Image
               src="/UIU_logo.png"
               alt="UNITAR"
@@ -121,26 +121,33 @@ export default function DataDashboard() {
               height={200}
               className="w-6 h-6 mr-4"
             />
-            <h1 className="text-2xl tracking-wider font-serif text-gray-900 dark:text-white">
+            <h1 className="text-2xl tracking-wider font-serif text-gray-900 dark:text-white ">
               UNITAR
             </h1>
           </div>
           <div className="w-full py-4 px-4 flex flex-col items-center justify-center text-white text-center gap-2">
-            <p className="text-4xl font-bold">SGS Leaderboard</p>
-            <p className="text-sm">Bring a Buddy, Clain Your Bounty</p>
+            <Image
+              src="/hero-title.png"
+              alt="SGS Leaderboard"
+              width={300}
+              height={100}
+              className="w-full object-contain"
+            />
+            {/* <p className="text-4xl font-bold">SGS Leaderboard</p>
+            <p className="text-sm">Bring a Buddy, Clain Your Bounty</p> */}
           </div>
 
           <div className="relative flex flex-col items-center justify-center space-y-4">
-            <div className="grid grid-cols-3  w-full items-end justify-around pt-4">
+            <div className="grid grid-cols-3  w-full items-end justify-around">
               {/* Second Place */}
               <div className="relative flex flex-col items-center">
-                <div className="h-24 w-24 border-2 border-[#b7f7ff] rounded-xl bg-transparent shadow-lg shadow-blue-500 flex items-center justify-center -skew-x-12 translate-x-2">
+                <div className="h-24 w-24 border-2  rounded-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-2">
                   <Image
-                    src="/rank.png"
+                    src="/ranks/Legendary.svg"
                     alt={topThree[1]?.nickname}
                     width={80}
                     height={80}
-                    className="rounded-xl object-cover object-center p-4 skew-x-12"
+                    className="rounded-xl object-cover object-center p-2 skew-x-12"
                   />
                 </div>
                 <span className="-mt-2 text-md tracking-tight px-3 rounded-sm text-blue-900 bg-blue-100 uppercase font-bold z-20">
@@ -156,13 +163,13 @@ export default function DataDashboard() {
 
               {/* First Place */}
               <div className="relative flex flex-col items-center">
-                <div className="h-[6.5rem] w-[6.5rem] border-2 border-[#b7f7ff] rounded-xl bg-transparent shadow-lg shadow-blue-500 flex items-center justify-center -skew-x-12 translate-x-2">
+                <div className="h-[6.5rem] w-[6.5rem] border-2 rounded-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-2">
                   <Image
-                    src="/rank.png"
+                    src="/ranks/Mythic.svg"
                     alt={topThree[1]?.nickname}
                     width={100}
                     height={100}
-                    className="rounded-xl object-cover object-center p-4 skew-x-12"
+                    className="rounded-xl object-cover object-center p-2 skew-x-12"
                   />
                 </div>
                 <span className="-mt-2 text-xl tracking-tight px-3 rounded-sm text-blue-900 bg-blue-100 uppercase font-bold z-20">
@@ -178,13 +185,13 @@ export default function DataDashboard() {
 
               {/* Third Place */}
               <div className="relative flex flex-col items-center">
-                <div className="h-[6rem] w-[6rem] border-2 border-[#b7f7ff] rounded-xl bg-transparent shadow-lg shadow-blue-500 flex items-center justify-center -skew-x-12 translate-x-2">
+                <div className="h-[6rem] w-[6rem] border-2 rounded-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-2">
                   <Image
-                    src="/rank.png"
+                    src="/ranks/Elite.svg"
                     alt={topThree[1]?.nickname}
                     width={80}
                     height={80}
-                    className="rounded-xl object-cover object-center p-4 skew-x-12"
+                    className="rounded-xl object-cover object-center p-2 skew-x-12"
                   />
                 </div>
                 <span className="-mt-2 text-md tracking-tight px-3 rounded-sm text-blue-900 bg-blue-100 uppercase font-bold z-20">
@@ -201,7 +208,7 @@ export default function DataDashboard() {
             </div>
           </div>
 
-          <ScrollArea className="min-h-[300px] p-4 pt-6">
+          <ScrollArea className="min-h-[300px] px-4 py-2">
             <div className="flex flex-row items-center justify-between px-4 pb-2 text-xs italic text-gray-300">
               <p>No.</p>
               <p className="-ml-28">Nickname</p>
@@ -219,18 +226,18 @@ export default function DataDashboard() {
                 >
                   <div className="flex items-center space-x-3 relative">
                     <span
-                      className={`w-6 text-center text-sm font-medium $"text-gray-500 dark:text-gray-300"
+                      className={`w-6 text-center text-sm font-thin $"text-gray-500 dark:text-gray-300"
                       `}
                     >
                       {index + 4}
                     </span>
-                    <div className="h-14 w-14 border border-[#b7f7ff] bg-blue-950 shadow-md shadow-blue-500 rounded-xl absolute left-7 flex items-center justify-center -skew-x-12">
+                    <div className="h-14 w-14 border bg-blue-950  rounded-xl absolute left-7 flex items-center justify-center -skew-x-12 border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f]">
                       <Image
-                        src="/rank.png"
-                        alt={topThree[1]?.nickname}
-                        width={80}
-                        height={80}
-                        className="rounded-xl object-cover object-center p-2 skew-x-12"
+                        src={`/ranks/${entry.title}.svg`}
+                        alt={entry.nickname}
+                        width={100}
+                        height={100}
+                        className="rounded-xl object-cover object-center p-1 skew-x-12"
                       />
                     </div>
                     <div className="flex flex-col gap-0 pl-20">
@@ -241,7 +248,7 @@ export default function DataDashboard() {
                         {entry.nickname}
                       </span>
                       <span
-                        className={`-mt-1 text-xs text-gray-500 dark:text-gray-300`}
+                        className={`-mt-1 text-xs text-gray-500 dark:text-gray-300 italic`}
                       >
                         {entry.title}
                       </span>
