@@ -230,9 +230,9 @@ export default function DataDashboard() {
 
           <ScrollArea className="min-h-[30rem] px-32 py-20">
             <div className="flex flex-row items-center justify-between px-4 py-14 text-xs italic text-gray-300 text-[3rem]">
-              <p className="">No.</p>
-              <p className="-translate-x-96">Nickname</p>
-              <p>Bounty*</p>
+              <p className="text-[3rem]">No.</p>
+              <p className="-translate-x-96 text-[3rem]">Nickname</p>
+              <p className="text-[3rem]">Bounty*</p>
             </div>
             <div className="space-y-14 text-[4rem]">
               {restOfLeaderboard.map((entry, index) => (
