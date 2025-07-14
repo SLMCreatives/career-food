@@ -17,10 +17,24 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import UploadForm from "@/components/uploadform";
+import { title } from "process";
 
 const revalidate = 30;
 
 const dynamic = "force-dynamic";
+
+const titles = [
+  "Mythic",
+  "Legendary",
+  "Elite",
+  "Diamond",
+  "Platinum",
+  "Gold",
+  "Silver",
+  "Bronze",
+  "Scout",
+  "Recruit"
+];
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "",
@@ -94,6 +108,12 @@ export default function DataDashboard() {
   const topThree = leaderboardData.slice(0, 3);
   const restOfLeaderboard = leaderboardData.slice(3, 9);
 
+  console.log(
+    restOfLeaderboard.map((entry) => ({
+      nickname: entry.nickname
+    }))
+  );
+
   return (
     <main className="space-y-6 absolute inset-0 overflow-y-auto bg-gradient-to-b from-[#0f1c3a]  via-[#1c3367] to-[#0f1c3a]">
       <div className="flex gap-4 justify-end w-full fixed bottom-4 right-4">
@@ -127,7 +147,7 @@ export default function DataDashboard() {
           </div>
           <div className="w-full py-4 px-4 flex flex-col items-center justify-center text-white text-center gap-2">
             <Image
-              src="/hero-title.png"
+              src="/sgs-title.png"
               alt="SGS Leaderboard"
               width={300}
               height={100}
