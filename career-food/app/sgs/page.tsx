@@ -193,7 +193,7 @@ export default function DataDashboard() {
                   />
                 </div>
                 <span className="-mt-2 text-[4.5rem] tracking-wide px-3 rounded-b-[1rem] text-blue-100 bg-blue-900 uppercase font-bold z-20 min-w-[30rem] text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] translate-x-1">
-                  topdog
+                  {topThree[0]?.nickname}
                 </span>
                 <span className="mt-6 text-[5rem] text-gray-500 dark:text-gray-300 italic">
                   Mythic
