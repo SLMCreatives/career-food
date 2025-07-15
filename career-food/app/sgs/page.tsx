@@ -115,7 +115,7 @@ export default function DataDashboard() {
   );
 
   return (
-    <main className="h-[3842px] w-[2162px] space-y-6 absolute inset-0 bg-gradient-to-b from-[#0f1c3a]  via-[#1c3367] to-[#0f1c3a]">
+    <main className="h-[3842px] w-[2162px] space-y-6 absolute inset-0 bg-gradient-to-b from-[#0f1c3a]  via-[#1c3367] to-[#0f1c3a] ring ring-white">
       <div className="flex gap-4 justify-end w-full fixed bottom-4 right-4 ">
         <ThemeSwitcher />
         <Dialog>
@@ -147,7 +147,7 @@ export default function DataDashboard() {
           </div>
           <div className="w-full py-20 px-52 flex flex-col items-center justify-center text-white text-center gap-2 bg-gradient-to-b from-[#0f1c3a] via-[#273e75] to-[#152852] ">
             <Image
-              src="/sgs-title.png"
+              src="/sgstitle-2.png"
               alt="SGS Leaderboard"
               width={3000}
               height={1000}
@@ -157,7 +157,7 @@ export default function DataDashboard() {
             <p className="text-[3rem]">Bring a Buddy, Clain Your Bounty</p> */}
           </div>
 
-          <div className="relative flex flex-col items-center justify-center space-y-4">
+          <div className="relative flex flex-col items-center justify-center space-y-4 -translate-x-12">
             <div className="grid grid-cols-3  w-full items-end justify-around px-20">
               {/* Second Place */}
               <div className="relative flex flex-col items-center">
@@ -170,7 +170,7 @@ export default function DataDashboard() {
                     className="w-full rounded-xl object-cover object-center p-2 skew-x-12 "
                   />
                 </div>
-                <span className="-mt-2 text-[4rem]  px-3 rounded-b-[1rem] text-blue-900 bg-blue-100 uppercase font-bold z-20 min-w-96 text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f]">
+                <span className="-mt-2 text-[3.5rem]  px-3 rounded-b-[1rem] text-blue-900 bg-blue-100 uppercase font-bold z-20 min-w-96 text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f]">
                   {topThree[1]?.nickname}
                 </span>
                 <span className="mt-6 text-[3rem] text-gray-500 dark:text-gray-300 italic">
@@ -198,7 +198,7 @@ export default function DataDashboard() {
                 <span className="mt-6 text-[5rem] text-gray-500 dark:text-gray-300 italic">
                   Mythic
                 </span>
-                <span className="-mt-4 text-[6rem] text-gray-500 dark:text-yellow-400">
+                <span className="-mt-4 text-[6rem] text-gray-500 dark:text-yellow-400 font-bold">
                   RM {topThree[0]?.total_bounty.toLocaleString("en-US")}
                 </span>
               </div>
@@ -214,7 +214,7 @@ export default function DataDashboard() {
                     className="rounded-xl object-cover object-center p-2 skew-x-12 "
                   />
                 </div>
-                <span className="-mt-2 text-[4rem] tracking-wide px-3 rounded-b-[1rem] text-blue-900 bg-blue-100 uppercase font-bold z-20 min-w-96 text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f]">
+                <span className="-mt-2 text-[3.5rem] tracking-wide px-3 rounded-b-[1rem] text-blue-900 bg-blue-100 uppercase font-bold z-20 min-w-96 text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f]">
                   {topThree[2]?.nickname}
                 </span>
                 <span className="mt-6 text-[3rem] text-gray-500 dark:text-gray-300 italic">
@@ -297,16 +297,20 @@ export default function DataDashboard() {
           className="w-64 h-64 object-cover rounded-lg shadow-lg"
         />
       </div>
-      <div className="flex flex-row items-center justify-between space-x-2 mx-auto px-32 py-10">
-        <p className="text-[3rem] text-gray-500 dark:text-gray-300">
-          <span className="font-serif font-thin">#ACCELERATE</span>YourFuture
-        </p>
+      <div className="flex flex-row items-center justify-between space-x-2 mx-auto px-32">
         <Link
           href="https://www.unitar.my"
           className="text-[3rem] text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
         >
           unitar.my
         </Link>
+        <Image
+          src="/accel-white.png"
+          alt="Accelerate Your Future"
+          width={1000}
+          height={1000}
+          className="w-[48rem] h-auto object-cover -px-20 translate-x-8"
+        />
       </div>
     </main>
   );
