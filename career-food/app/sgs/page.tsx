@@ -290,7 +290,7 @@ export default function DataDashboard() {
           details.
         </p>
         <Image
-          src="/sample_qr.jpeg"
+          src="/sgsterms.svg"
           alt="QR Code for Terms and Conditions"
           width={1000}
           height={1000}
