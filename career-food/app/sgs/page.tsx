@@ -300,7 +300,7 @@ export default function DataDashboard() {
       <div className="flex flex-row items-center justify-between space-x-2 mx-auto px-32">
         <Link
           href="https://www.unitar.my"
-          className="text-[3rem] text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+          className="text-[3.5rem] text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
         >
           unitar.my
         </Link>

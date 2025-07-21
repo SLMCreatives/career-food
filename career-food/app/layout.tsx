@@ -50,7 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={poppins.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground ">
+      <body className="bg-stone-50 dark:bg-slate-900 text-foreground ">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -59,16 +59,23 @@ export default function RootLayout({
         >
           <main className="flex flex-col items-center min-h-screen">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center h-16 py-2 bg-white">
+              <nav className="w-full flex justify-center h-16 py-2 bg-white dark:bg-slate-950">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
                     <Link href={"/"}>
                       <Image
-                        src="/unitar-logo.png"
+                        src="/UIU-white.png"
                         alt="UNITAR Logo"
-                        width={50}
-                        height={50}
-                        className="w-14 h-14"
+                        width={1000}
+                        height={1000}
+                        className="w-auto h-10 object-cover hidden dark:block"
+                      />
+                      <Image
+                        src="/UIU_logo.png"
+                        alt="UNITAR Logo"
+                        width={1000}
+                        height={1000}
+                        className="w-auto h-10 object-cover dark:hidden block"
                       />
                     </Link>
                   </div>
