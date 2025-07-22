@@ -2,8 +2,8 @@ import { ThemeProvider } from "next-themes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SGS Leaderboard | UNITAR",
-  description: "SGS Leaderboard for UNITAR Sept Intake"
+  title: "Brand Loyalty Survey",
+  description: "Brand Loyalty Survey Question"
 };
 
 export default function SgsLayout({

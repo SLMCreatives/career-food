@@ -22,6 +22,25 @@ import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
+const states = [
+  { code: "JHR", name: "Johor" },
+  { code: "KDH", name: "Kedah" },
+  { code: "KTN", name: "Kelantan" },
+  { code: "MLK", name: "Melaka" },
+  { code: "NSN", name: "Negeri Sembilan" },
+  { code: "PHG", name: "Pahang" },
+  { code: "PRK", name: "Perak" },
+  { code: "PLS", name: "Perlis" },
+  { code: "PNG", name: "Pulau Pinang" },
+  { code: "SBH", name: "Sabah" },
+  { code: "SWK", name: "Sarawak" },
+  { code: "SGR", name: "Selangor" },
+  { code: "TRG", name: "Terengganu" },
+  { code: "KUL", name: "W.P. Kuala Lumpur" },
+  { code: "LBN", name: "W.P. Labuan" },
+  { code: "PJY", name: "W.P. Putrajaya" }
+];
+
 export default function SurveySection() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -109,8 +128,8 @@ export default function SurveySection() {
               📱 Tinjauan Kesetiaan Jenama & Pengaruh Gen Z
             </CardTitle>
             <CardDescription className="text-lg text-gray-600 dark:text-gray-200">
-              🧠 Apa Buat Anda Setia? Meneroka Kesetiaan Jenama dalam Kalangan
-              Gen Z
+              🧠 Kenapa Anda Setia? Meneroka Kesetiaan Jenama dalam Kalangan Gen
+              Z
             </CardDescription>
           </CardHeader>
         </Card>
@@ -128,15 +147,13 @@ export default function SurveySection() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div>
-                <Label className="text-base font-medium">
-                  1. Berapa umur anda?
-                </Label>
+                <Label className="text-base font-medium">1. Umur</Label>
                 <RadioGroup
                   value={formData.age}
                   onValueChange={(value) =>
                     setFormData((prev) => ({ ...prev, age: value }))
                   }
-                  className="mt-2"
+                  className="mt-2 grid grid-cols-3"
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="15" id="age-15" />
@@ -154,19 +171,21 @@ export default function SurveySection() {
                     <RadioGroupItem value="18" id="age-18" />
                     <Label htmlFor="age-18">18 tahun</Label>
                   </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="+19" id="age-19" />
+                    <Label htmlFor="age-19">+19 tahun</Label>
+                  </div>
                 </RadioGroup>
               </div>
 
               <div>
-                <Label className="text-base font-medium">
-                  2. Jantina (Pilihan)
-                </Label>
+                <Label className="text-base font-medium">2. Jantina</Label>
                 <RadioGroup
                   value={formData.gender}
                   onValueChange={(value) =>
                     setFormData((prev) => ({ ...prev, gender: value }))
                   }
-                  className="mt-2"
+                  className="mt-2 grid grid-cols-2"
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="lelaki" id="gender-male" />
@@ -176,7 +195,7 @@ export default function SurveySection() {
                     <RadioGroupItem value="perempuan" id="gender-female" />
                     <Label htmlFor="gender-female">Perempuan</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 col-span-2">
                     <RadioGroupItem
                       value="prefer-not-to-say"
                       id="gender-prefer"
@@ -190,9 +209,29 @@ export default function SurveySection() {
 
               <div>
                 <Label htmlFor="location" className="text-base font-medium">
-                  3. Bandar / Lokasi tempat tinggal anda?
+                  3. Negeri Asal
                 </Label>
-                <Input
+                <div className="grid grid-cols-2 ">
+                  {states.map((state, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 mt-2"
+                    >
+                      <Checkbox
+                        id={state.code}
+                        checked={formData.location === state.code}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            location: checked ? state.code : ""
+                          }))
+                        }
+                      />
+                      <Label htmlFor={state.code}>{state.name}</Label>
+                    </div>
+                  ))}
+                </div>
+                {/*  <Input
                   id="location"
                   value={formData.location}
                   onChange={(e) =>
@@ -203,7 +242,7 @@ export default function SurveySection() {
                   }
                   placeholder="Jawapan ringkas"
                   className="mt-2"
-                />
+                /> */}
               </div>
             </CardContent>
           </Card>
@@ -278,7 +317,7 @@ export default function SurveySection() {
                   htmlFor="favorite-brands"
                   className="text-base font-medium"
                 >
-                  5. Namakan sehingga 3 jenama yang anda PALING SUKA sekarang.
+                  5. Namakan 3 jenama kegemaran anda.
                 </Label>
                 <Input
                   id="favorite-brands"
@@ -483,7 +522,7 @@ export default function SurveySection() {
                   10. Di mana anda biasa jumpa jenama atau produk baru? (Pilih 2
                   utama)
                 </Label>
-                <div className="mt-2 space-y-2">
+                <div className="mt-2 space-y-2 grid grid-cols-2 gap-x-4">
                   {[
                     { value: "tiktok", label: "TikTok" },
                     { value: "instagram", label: "Instagram" },
@@ -524,7 +563,7 @@ export default function SurveySection() {
 
               <div>
                 <Label htmlFor="local-trends" className="text-base font-medium">
-                  11. Ada tak trend atau jenama tempatan yang hanya orang
+                  11. Apakah trend atau jenama tempatan yang hanya orang
                   Malaysia akan faham dan anda tengah minat sekarang?
                 </Label>
                 <Textarea
@@ -576,7 +615,7 @@ export default function SurveySection() {
                   htmlFor="outdated-brand"
                   className="text-base font-medium"
                 >
-                  {`13. Satu jenama yang rasa "ketinggalan zaman"?`}
+                  {`13. Satu jenama yang anda rasa "ketinggalan zaman"?`}
                 </Label>
                 <Input
                   id="outdated-brand"
