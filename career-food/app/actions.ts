@@ -190,7 +190,9 @@ type sgsLeaders = {
 
 export async function uploadsgsRecords(table: string, records: sgsLeaders[]) {
   try {
-    const { data, error } = await supabaseAdmin.from(table).upsert(records);
+    const { data, error } = await supabaseAdmin.from(table).upsert(records, {
+      onConflict: "nickname"
+    });
 
     if (error) {
       console.log("Supabase insert error:", error.message);
