@@ -7,18 +7,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import { redirect } from "next/navigation";
-import Image from "next/image";
-import { Button } from "./ui/button";
-import Link from "next/link";
-import { Download } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "./ui/card";
 
 type sgsLeaders = {
   name: string;
@@ -71,7 +59,6 @@ export default function UploadForm() {
           );
         }
       }
-
       toast("Upload complete!");
     } catch (err: any) {
       toast("Upload failed");

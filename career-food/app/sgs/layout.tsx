@@ -1,5 +1,6 @@
 import { ThemeProvider } from "next-themes";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "SGS Leaderboard | UNITAR",
@@ -20,6 +21,7 @@ export default function SgsLayout({
         disableTransitionOnChange
       >
         {children}
+        <Toaster />
       </ThemeProvider>
     </>
   );
