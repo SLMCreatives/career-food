@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import { redirect } from "next/navigation";
+import UploadForm from "@/components/uploadform";
 
 type sgsLeaders = {
   name: string;
@@ -76,26 +77,24 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen items-center justify-center bg-gray-100 p-4 absolute inset-0 flex">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
         <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
-          Excel → Dashboard
+          Update SGS Leaderboard
         </h1>
-        <p className="mb-4 text-center text-gray-600">
-          Upload your Excel file (<code>.xlsx</code>, <code>.xls</code>) to
-          populate a Supabase table.
-        </p>
-        <div className="flex flex-col items-center space-y-4">
+
+        <UploadForm />
+        {/* <div className="flex flex-col items-center space-y-4">
           <Input
             id="excel-file"
             type="file"
             accept=".xlsx, .xls"
             onChange={handleFile}
-            /*     className="block w-full text-sm text-gray-500
+                className="block w-full text-sm text-gray-500
           file:mr-4 file:rounded-full file:border-0
           file:bg-blue-50 file:px-4 file:py-2
           file:text-sm file:font-semibold file:text-blue-700
-          hover:file:bg-blue-100" */
+          hover:file:bg-blue-100"
             disabled={loading}
           />
           {loading && (
@@ -103,7 +102,13 @@ export default function HomePage() {
               Uploading... Please do not close this page.
             </p>
           )}
-        </div>
+        </div> */}
+
+        {loading && (
+          <p className="text-blue-600">
+            Uploading... Please do not close this page.
+          </p>
+        )}
       </div>
     </div>
   );

@@ -79,6 +79,7 @@ export default function UploadForm() {
       setLoading(false);
       // Clear the file input after upload attempt
       e.target.value = "";
+      redirect("/sgs");
     }
   };
 
@@ -94,8 +95,8 @@ export default function UploadForm() {
 
   return (
     <div className="flex flex-col text-left space-y-4 text-white">
-      <p className="text-muted dark:text-muted-foreground text-lg">
-        Upload Latest Data
+      <p className="text-muted dark:text-muted-foreground text-md">
+        Only accepts .xlsx file.
       </p>
       <Input
         id="excel-file"
@@ -103,14 +104,9 @@ export default function UploadForm() {
         accept=".xlsx, .xls"
         onChange={handleFile}
         className="text-muted-foreground bg-white dark:bg-slate-700 dark:text-white file:italic file:text-sm text-sm"
-        /*     className="block w-full text-sm text-gray-500
-          file:mr-4 file:rounded-full file:border-0
-          file:bg-blue-50 file:px-4 file:py-2
-          file:text-sm file:font-semibold file:text-blue-700
-          hover:file:bg-blue-100" */
         disabled={loading}
       />
-      <div className="h-1 bg-muted dark:bg-muted-foreground rounded-full"></div>
+      {/* <div className="h-1 bg-muted dark:bg-muted-foreground rounded-full"></div>
       <Card>
         <CardHeader>
           <CardTitle>
@@ -139,7 +135,7 @@ export default function UploadForm() {
             <Download className="mr-2 h-4 w-4" /> Download Sample
           </Button>
         </CardFooter>
-      </Card>
+      </Card> */}
       {loading && (
         <p className="text-muted dark:text-muted-foreground">
           Uploading... Please do not close this page.

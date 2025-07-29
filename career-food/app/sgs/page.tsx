@@ -116,9 +116,12 @@ export default function DataDashboard() {
 
   return (
     <main className="h-[3842px] w-[2162px] space-y-6 absolute inset-0 bg-gradient-to-b from-[#0f1c3a]  via-[#1c3367] to-[#0f1c3a] ring ring-white">
-      <div className="flex gap-4 justify-end w-full fixed bottom-4 right-4 ">
+      <div className="flex gap-4 justify-end w-full fixed bottom-4 right-4 z-50">
         <ThemeSwitcher />
-        <Dialog>
+        <Link href="/sgs/upload" className="text-3xl">
+          +
+        </Link>
+        {/* <Dialog>
           <DialogTrigger className="pr-4 text-2xl text-muted-foreground hover:text-white">
             +
           </DialogTrigger>
@@ -126,7 +129,7 @@ export default function DataDashboard() {
             <DialogTitle className="sr-only">Update Data</DialogTitle>
             <UploadForm />
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
         {/* <Button variant={"default"} size={"icon"} asChild>
           <Link href="/sgs/upload">+</Link>
         </Button> */}
@@ -164,7 +167,7 @@ export default function DataDashboard() {
                 <div className="h-96 w-96 border-2  rounded-t-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-12 p-4">
                   <Image
                     src="/ranks/Legendary.svg"
-                    alt={topThree[1]?.nickname}
+                    alt={topThree[1]?.nickname || "Legend"}
                     width={1000}
                     height={1000}
                     className="w-full rounded-xl object-cover object-center p-2 skew-x-12 "
@@ -186,7 +189,7 @@ export default function DataDashboard() {
                 <div className="h-[30rem] w-[30rem] border-2 rounded-t-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-16">
                   <Image
                     src="/ranks/Mythic.svg"
-                    alt={topThree[1]?.nickname}
+                    alt={topThree[1]?.nickname || "Mythic"}
                     width={1000}
                     height={1000}
                     className="w-full rounded-xl object-cover object-center p-2 skew-x-12 scale-110 pb-20"
@@ -208,7 +211,7 @@ export default function DataDashboard() {
                 <div className="h-96 w-96 border-2 rounded-t-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-12 p-4">
                   <Image
                     src="/ranks/Elite.svg"
-                    alt={topThree[1]?.nickname}
+                    alt={topThree[1]?.nickname || "Elite"}
                     width={1000}
                     height={1000}
                     className="rounded-xl object-cover object-center p-2 skew-x-12 "
