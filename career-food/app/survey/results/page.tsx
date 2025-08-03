@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -16,18 +16,42 @@ import {
 } from "recharts";
 import clsx from "clsx";
 import Papa from "papaparse";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import {
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { createClient } from "@/utils/supabase/client";
+import { Button } from "@/components/ui/button";
 
 /** ------------------------------- Types ------------------------------- */
 type Loyalty = "Loyal" | "Depends" | "Not-Loyal";
 type Gender = "Lelaki" | "Perempuan" | "Prefer-Not-To-Say";
 type Row = {
-  loyalty: Loyalty;
+  age: string;
   gender: Gender;
-  state: string;
-  reasons: string[];
-  discover: string[];
-  stopReasons: string[];
+  loyalty: Loyalty;
+  brand_reasons: string[];
+  discover_brands: string[];
+  stop_supporting: string[];
+  location: string;
 };
+
+const supabase = createClient();
+
+/** ------------------------------- Real Data ------------------------------- */
 
 /** ---------------------------- Mock dataset --------------------------- */
 const STATES = [
@@ -41,7 +65,7 @@ const STATES = [
   "Pahang"
 ] as const;
 
-const MOCK: Row[] = Array.from({ length: 850 }).map(() => {
+/* const MOCK: Row[] = Array.from({ length: 850 }).map(() => {
   const r = Math.random();
   const loyalty: Loyalty =
     r < 0.63 ? "Depends" : r < 0.81 ? "Not-Loyal" : "Loyal";
@@ -77,7 +101,7 @@ const MOCK: Row[] = Array.from({ length: 850 }).map(() => {
   if (Math.random() < 0.04) stopReasons.push("Because friends stop");
 
   return { loyalty, gender, state, reasons, discover, stopReasons };
-});
+}); */
 
 /** ------------------------------ Utils -------------------------------- */
 const COLORS = [
@@ -103,7 +127,7 @@ function applyFilters(rows: Row[], f: Filters) {
   return rows.filter((r) => {
     const g = f.gender === "All" || r.gender === f.gender;
     const l = f.loyalty === "All" || r.loyalty === f.loyalty;
-    const s = f.states.length === 0 || f.states.includes(r.state);
+    const s = f.states.length === 0 || f.states.includes(r.location);
     return g && l && s;
   });
 }
@@ -176,40 +200,103 @@ function rowsFromCsv(records: any[]): Row[] {
     const discover = splitList(rec.discover_clean || rec.discover);
     const stopReasons = splitList(rec.stop_reasons_clean || rec.stop_reasons);
     if (loyalty && gender)
-      out.push({ loyalty, gender, state, reasons, discover, stopReasons });
+      out.push({
+        loyalty,
+        gender,
+        location: state,
+        brand_reasons: reasons,
+        discover_brands: discover,
+        stop_supporting: stopReasons,
+        age: rec.age || "Unknown"
+      });
   });
   return out;
 }
 
 /** ------------------------------ Page --------------------------------- */
 export default function ResultsPage() {
-  const [data, setData] = useState<Row[]>(MOCK);
+  const [data, setData] = useState<Row[]>([]);
   const [filters, setFilters] = useState<Filters>({
     gender: "All",
     loyalty: "All",
     states: []
   });
+
+  // 1. Fetch from Supabase on mount
+  useEffect(() => {
+    supabase
+      .from("brand_survey")
+      .select("*")
+      .then(({ data: rows, error }) => {
+        if (error) {
+          console.log("Error loading data:", error);
+          return;
+        }
+        console.log("rows", rows);
+        // 2. Map raw rows into your Row type
+        const parsed: Row[] = rows
+          .map((rec: any) => {
+            const loyalty = mapLoyalty(rec.loyalty || "");
+            const gender = mapGender(rec.gender || "");
+            const location = rec.location || "Unknown";
+            // These fields may be missing, so default to empty arrays
+            const brand_reasons: string[] = Array.isArray(rec.brand_reasons)
+              ? rec.brand_reasons
+              : [];
+            const discover_brands: string[] = Array.isArray(rec.discover_brands)
+              ? rec.discover_brands
+              : [];
+            const stop_supporting: string[] = Array.isArray(rec.stop_supporting)
+              ? rec.stop_supporting
+              : [];
+            if (loyalty && gender) {
+              return {
+                loyalty,
+                gender,
+                location,
+                brand_reasons,
+                discover_brands,
+                stop_supporting,
+                age: rec.age || "Unknown"
+              } as Row;
+            }
+            return null;
+          })
+          .filter((r): r is Row => r !== null);
+
+        setData(parsed);
+        console.log(parsed);
+      });
+  }, []);
+
+  /* const [data, setData] = useState<Row[]>(MOCK);
+  const [filters, setFilters] = useState<Filters>({
+    gender: "All",
+    loyalty: "All",
+    states: []
+  }); */
+
   const filtered = useMemo(() => applyFilters(data, filters), [data, filters]);
 
   // recompute derived
   const loyalty = useMemo(() => loyaltySplit(filtered), [filtered]);
   const discover = useMemo(
-    () => topNCountsFromListField(filtered, (r) => r.discover, 6),
+    () => topNCountsFromListField(filtered, (r) => r.discover_brands, 6),
     [filtered]
   );
   const reasons = useMemo(
-    () => topNCountsFromListField(filtered, (r) => r.reasons, 6),
+    () => topNCountsFromListField(filtered, (r) => r.brand_reasons, 6),
     [filtered]
   );
   const stops = useMemo(
-    () => topNCountsFromListField(filtered, (r) => r.stopReasons, 6),
+    () => topNCountsFromListField(filtered, (r) => r.stop_supporting, 6),
     [filtered]
   );
   const topDiscovery = discover.data[0]?.item ?? "—";
   const topDiscoveryPct = discover.data[0]?.percentage ?? 0;
   const topStop = stops.data[0]?.item ?? "—";
   const topStopPct = stops.data[0]?.percentage ?? 0;
-  const allStates = useMemo(() => uniq(data.map((r) => r.state)), [data]);
+  const allStates = useMemo(() => uniq(data.map((r) => r.location)), [data]);
 
   // segmented helpers
   const genderTabs: Array<{ key: Gender; label: string }> = [
@@ -219,7 +306,7 @@ export default function ResultsPage() {
   ];
   function discoveryForGender(g: Gender) {
     const sub = filtered.filter((r) => r.gender === g);
-    return topNCountsFromListField(sub, (r) => r.discover, 5).data;
+    return topNCountsFromListField(sub, (r) => r.discover_brands, 5).data;
   }
   const loyaltyTabs: Array<{ key: Loyalty; label: string }> = [
     { key: "Loyal", label: "Loyal" },
@@ -228,7 +315,7 @@ export default function ResultsPage() {
   ];
   function reasonsForLoyalty(l: Loyalty) {
     const sub = filtered.filter((r) => r.loyalty === l);
-    return topNCountsFromListField(sub, (r) => r.reasons, 5).data;
+    return topNCountsFromListField(sub, (r) => r.brand_reasons, 5).data;
   }
 
   // CSV upload handler
@@ -256,102 +343,57 @@ export default function ResultsPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
+    <div className="flex w-full bg-gray-50 absolute inset-0 items-start justify-start md:p-10 py-10 px-2 min-h-10rem">
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Gen Z Brand Loyalty — One‑Page Dashboard
+          <h1 className="text-4xl md:text-3xl font-bold text-gray-900">
+            Gen-Z Brand Loyalty & Behaviour
           </h1>
-          <p className="text-gray-600">
-            Upload your cleaned CSV (or explore using mock data). Filter by
-            Gender, Loyalty, and State.
-          </p>
+          <p className="text-gray-600">Across Malaysia | 2025</p>
         </div>
-
-        {/* Upload */}
-        <div className="bg-white rounded-2xl shadow p-5 mb-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-            <div>
-              <div className="text-sm font-semibold text-gray-700 mb-1">
-                Upload cleaned CSV
-              </div>
-              <div className="text-sm text-gray-500">
-                Expected headers:{" "}
-                <code>
-                  loyalty_clean, gender_clean, state_clean, reasons_clean,
-                  discover_clean, stop_reasons_clean
-                </code>
-              </div>
-            </div>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 text-white cursor-pointer">
-              <input
-                type="file"
-                accept=".csv"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) onCsv(f);
-                }}
-              />
-              Choose CSV
-            </label>
-          </div>
+        <div className="absolute top-4 right-4">
+          <ThemeSwitcher />
         </div>
 
         {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
           {/* Gender */}
-          <div className="bg-white rounded-2xl shadow p-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <div className="bg-white rounded-2xl shadow p-4 space-y-2 ">
+            <Label className="block text-sm font-semibold text-gray-700 mb-2">
               Gender
-            </label>
-            <select
-              className="w-full rounded-xl border-gray-300"
-              value={filters.gender}
-              onChange={(e) =>
+            </Label>
+            <Select
+              onValueChange={(value) =>
                 setFilters((f) => ({
                   ...f,
-                  gender: e.target.value as Filters["gender"]
+                  gender: value as Filters["gender"]
                 }))
               }
             >
-              <option value="All">All</option>
-              <option value="Perempuan">Perempuan</option>
-              <option value="Lelaki">Lelaki</option>
-              <option value="Prefer-Not-To-Say">Prefer‑Not‑To‑Say</option>
-            </select>
+              <SelectTrigger className="w-full bg-gray-200 dark:bg-gray-400">
+                <SelectValue placeholder="All" defaultValue={filters.gender} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="Lelaki">Male</SelectItem>
+                  <SelectItem value="Perempuan">Female</SelectItem>
+                  <SelectItem value="Prefer-Not-To-Say">Undeclared</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
-          {/* Loyalty */}
-          <div className="bg-white rounded-2xl shadow p-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Loyalty
-            </label>
-            <select
-              className="w-full rounded-xl border-gray-300"
-              value={filters.loyalty}
-              onChange={(e) =>
-                setFilters((f) => ({
-                  ...f,
-                  loyalty: e.target.value as Filters["loyalty"]
-                }))
-              }
-            >
-              <option value="All">All</option>
-              <option value="Loyal">Loyal</option>
-              <option value="Depends">Depends</option>
-              <option value="Not-Loyal">Not‑Loyal</option>
-            </select>
-          </div>
+
           {/* State multiselect */}
-          <div className="bg-white rounded-2xl shadow p-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <div className="bg-white rounded-2xl shadow p-4 space-y-2">
+            <Label className="block text-sm font-semibold text-gray-700 mb-2">
               State (multi‑select)
-            </label>
+            </Label>
             <div className="flex flex-wrap gap-2">
-              {uniq(data.map((r) => r.state)).map((s) => {
+              {uniq(data.map((r) => r.location)).map((s) => {
                 const active = filters.states.includes(s);
                 return (
-                  <button
+                  <Button
                     key={s}
                     onClick={() =>
                       setFilters((f) => {
@@ -365,14 +407,14 @@ export default function ResultsPage() {
                       })
                     }
                     className={clsx(
-                      "px-3 py-1 rounded-full text-sm border",
+                      "px-3 py-1 rounded-full text-md border",
                       active
                         ? "bg-gray-900 text-white border-gray-900"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                     )}
                   >
                     {s}
-                  </button>
+                  </Button>
                 );
               })}
               {filters.states.length > 0 && (
@@ -388,7 +430,7 @@ export default function ResultsPage() {
         </div>
 
         {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <KPI
             label="Respondents (N)"
             value={loyalty.total.toLocaleString()}
@@ -424,6 +466,9 @@ export default function ResultsPage() {
                     innerRadius={60}
                     outerRadius={100}
                     paddingAngle={2}
+                    label={loyalty.total > 0}
+                    labelLine={false}
+                    legendType="circle"
                   >
                     {loyalty.items.map((entry, idx) => (
                       <Cell
@@ -454,12 +499,34 @@ export default function ResultsPage() {
             </div>
           </Card>
 
+          <Card title="Insight on Loyalty Split">
+            <CardContent>
+              <ul className=" text-md list-disc list-outside">
+                <li>
+                  Seven in ten say their allegiance is situational, they will
+                  switch when a better option appears.
+                </li>
+                <li>
+                  Male respondents: 13% self declare loyal, 65% “depends”, 16%
+                  not loyal.
+                </li>
+                <li>
+                  Female respondents: 6% loyal, 66% “depends”, 18% not loyal.
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className=" italic text-md border-l border-gray-700 pl-4 py-2">
+              Men say they are twice as loyal, but both genders show similar
+              “switch if necessary” behaviour.
+            </CardFooter>
+          </Card>
+
           <Card title="Where they discover brands (Top 6)">
             <div className="h-72">
               <ResponsiveContainer>
-                <BarChart data={discover.data}>
+                <BarChart data={discover.data} className="">
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="item" />
+                  <XAxis dataKey="item" className="text-xs" />
                   <YAxis />
                   <Tooltip
                     formatter={(val: any) =>
@@ -476,12 +543,26 @@ export default function ResultsPage() {
             </div>
           </Card>
 
+          <Card title="Insight on Platforms">
+            <CardContent>
+              <ul className=" text-md list-disc list-outside">
+                <li>Short form video is the discovery king.</li>
+                <li>Search driven marketplaces and peer chatter back it up.</li>
+                <li>A lot more men discover brands on YouTube than women.</li>
+              </ul>
+            </CardContent>
+            {/*  <CardFooter className=" italic text-md border-l border-gray-700 pl-4 py-2">
+              Men say they are twice as loyal, but both genders show similar
+              “switch if necessary” behaviour.
+            </CardFooter> */}
+          </Card>
+
           <Card title="What earns loyalty (Top 6)">
             <div className="h-72">
               <ResponsiveContainer>
                 <BarChart data={reasons.data}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="item" />
+                  <XAxis dataKey="item" className="text-xs" />
                   <YAxis />
                   <Tooltip
                     formatter={(val: any) =>
@@ -498,12 +579,28 @@ export default function ResultsPage() {
             </div>
           </Card>
 
+          <Card title="Insight on Earning Loyalty">
+            <CardContent>
+              <ul className=" text-md list-disc list-outside">
+                <li>
+                  Biggest take away: Emotional resonance (“gets me”) edges out
+                  price;
+                </li>
+                <li>Sustainability is emerging but still secondary.</li>
+              </ul>
+            </CardContent>
+            {/*  <CardFooter className=" italic text-md border-l border-gray-700 pl-4 py-2">
+              Men say they are twice as loyal, but both genders show similar
+              “switch if necessary” behaviour.
+            </CardFooter> */}
+          </Card>
+
           <Card title="Why they stop supporting (Top 6)">
             <div className="h-72">
               <ResponsiveContainer>
                 <BarChart data={stops.data}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="item" />
+                  <XAxis dataKey="item" className="text-xs" />
                   <YAxis />
                   <Tooltip
                     formatter={(val: any) =>
@@ -519,6 +616,26 @@ export default function ResultsPage() {
               </ResponsiveContainer>
             </div>
           </Card>
+
+          <Card title="Insight on Earning Loyalty">
+            <CardContent>
+              <ul className=" text-md list-disc list-outside">
+                <li>
+                  Service failure and values misalignment are more lethal than
+                  price.
+                </li>
+                <li>Public Controversy is a major factor as well.</li>
+                <li>
+                  Not backing social issues can play a significant role in
+                  loyalty.
+                </li>
+              </ul>
+            </CardContent>
+            {/*  <CardFooter className=" italic text-md border-l border-gray-700 pl-4 py-2">
+              Men say they are twice as loyal, but both genders show similar
+              “switch if necessary” behaviour.
+            </CardFooter> */}
+          </Card>
         </div>
 
         {/* Segments */}
@@ -531,7 +648,7 @@ export default function ResultsPage() {
                 <ResponsiveContainer>
                   <BarChart data={discoveryForGender(t.key)}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="item" />
+                    <XAxis dataKey="item" className="text-xs" />
                     <YAxis />
                     <Tooltip
                       formatter={(val: any) =>
@@ -556,7 +673,7 @@ export default function ResultsPage() {
                 <ResponsiveContainer>
                   <BarChart data={reasonsForLoyalty(t.key)}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="item" />
+                    <XAxis dataKey="item" className="text-xs" />
                     <YAxis />
                     <Tooltip
                       formatter={(val: any) =>
@@ -598,29 +715,6 @@ export default function ResultsPage() {
             </li>
           </ul>
         </Card>
-
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <KPI
-            label="Top discovery"
-            value={topDiscovery}
-            sub={`${topDiscoveryPct.toFixed(1)}%`}
-          />
-          <KPI
-            label="Top churn driver"
-            value={topStop}
-            sub={`${topStopPct.toFixed(1)}%`}
-          />
-          <KPI
-            label="States selected"
-            value={filters.states.length.toString()}
-            sub={filters.states.join(", ") || "All"}
-          />
-          <KPI
-            label="Filters"
-            value={`${filters.gender} / ${filters.loyalty}`}
-            sub="Gender / Loyalty"
-          />
-        </div>
       </div>
     </div>
   );
