@@ -158,7 +158,7 @@ export default function DataDashboard() {
             />
             <p className="text-[4.5rem] font-thin italic">
               Stand A Chance To Win A{" "}
-              <span className="font-bold  text-yellow-400">Perodua Mivy!</span>
+              <span className="font-bold  text-yellow-400">Perodua Myvi!</span>
             </p>
           </div>
 
