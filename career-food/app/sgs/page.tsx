@@ -156,8 +156,10 @@ export default function DataDashboard() {
               height={1000}
               className="w-full h-auto object-contain"
             />
-            {/* <p className="text-4xl font-bold">SGS Leaderboard</p>
-            <p className="text-[3rem]">Bring a Buddy, Clain Your Bounty</p> */}
+            <p className="text-[4.5rem] font-thin italic">
+              Stand A Chance To Win A{" "}
+              <span className="font-bold  text-yellow-400">Perodua Mivy!</span>
+            </p>
           </div>
 
           <div className="relative flex flex-col items-center justify-center space-y-4 -translate-x-12">
@@ -166,18 +168,18 @@ export default function DataDashboard() {
               <div className="relative flex flex-col items-center">
                 <div className="h-96 w-96 border-2  rounded-t-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-12 p-4">
                   <Image
-                    src="/ranks/Legendary.svg"
+                    src={`/ranks/${topThree[1]?.title || "Elite"}.svg`}
                     alt={topThree[1]?.nickname || "Legend"}
                     width={1000}
                     height={1000}
-                    className="w-full rounded-xl object-cover object-center p-2 skew-x-12 "
+                    className="w-full rounded-xl object-cover object-center p-2 skew-x-12 -translate-x-3"
                   />
                 </div>
                 <span className="-mt-2 text-[3.5rem]  px-3 rounded-b-[1rem] text-blue-900 bg-blue-100 uppercase font-bold z-20 min-w-96 text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f]">
                   {topThree[1]?.nickname}
                 </span>
                 <span className="mt-6 text-[3rem] text-gray-500 dark:text-gray-300 italic">
-                  Legendary
+                  {topThree[1]?.title}
                 </span>
                 <span className="text-[4rem] text-gray-500 dark:text-gray-200">
                   RM {topThree[1]?.total_bounty.toLocaleString("en-US")}
@@ -188,18 +190,18 @@ export default function DataDashboard() {
               <div className="relative flex flex-col items-center">
                 <div className="h-[30rem] w-[30rem] border-2 rounded-t-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-16">
                   <Image
-                    src="/ranks/Mythic.svg"
+                    src={`/ranks/${topThree[0]?.title || "Elite"}.svg`}
                     alt={topThree[1]?.nickname || "Mythic"}
                     width={1000}
                     height={1000}
-                    className="w-full rounded-xl object-cover object-center p-2 skew-x-12 scale-110 pb-20"
+                    className="w-full rounded-xl object-cover object-center p-2 -translate-x-3 skew-x-12 scale-110 pb-20"
                   />
                 </div>
                 <span className="-mt-2 text-[4.5rem] tracking-wide px-3 rounded-b-[1rem] text-blue-100 bg-blue-900 uppercase font-bold z-20 min-w-[30rem] text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] translate-x-1">
                   {topThree[0]?.nickname}
                 </span>
                 <span className="mt-6 text-[5rem] text-gray-500 dark:text-gray-300 italic">
-                  Mythic
+                  {topThree[0]?.title}
                 </span>
                 <span className="-mt-4 text-[6rem] text-gray-500 dark:text-yellow-400 font-bold">
                   RM {topThree[0]?.total_bounty.toLocaleString("en-US")}
@@ -210,19 +212,18 @@ export default function DataDashboard() {
               <div className="relative flex flex-col items-center">
                 <div className="h-96 w-96 border-2 rounded-t-xl bg-transparent border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f] flex items-center justify-center -skew-x-12 translate-x-12 p-4">
                   <Image
-                    src="/ranks/Elite.svg"
+                    src={`/ranks/${topThree[2]?.title || "Elite"}.svg`}
                     alt={topThree[1]?.nickname || "Elite"}
                     width={1000}
                     height={1000}
-                    className="rounded-xl object-cover object-center p-2 skew-x-12 "
+                    className="rounded-xl object-cover object-center p-2 -translate-x-2 skew-x-12 "
                   />
                 </div>
                 <span className="-mt-2 text-[3.5rem] tracking-wide px-3 rounded-b-[1rem] text-blue-900 bg-blue-100 uppercase font-bold z-20 min-w-96 text-center -skew-x-12 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f,0_0_30px_#08f]">
                   {topThree[2]?.nickname}
                 </span>
                 <span className="mt-6 text-[3rem] text-gray-500 dark:text-gray-300 italic">
-                  Elite
-                  {/* {topThree[2]?.title} */}
+                  {topThree[2]?.title}
                 </span>
                 <span className="text-[4rem] text-gray-500 dark:text-gray-200">
                   RM {topThree[2]?.total_bounty.toLocaleString("en-US")}
@@ -231,7 +232,7 @@ export default function DataDashboard() {
             </div>
           </div>
 
-          <ScrollArea className="min-h-[30rem] px-32 py-20">
+          <ScrollArea className="min-h-[30rem] px-32 py-18 pb-4">
             <div className="flex flex-row items-center justify-between px-4 py-14 text-xs italic text-gray-300 text-[3rem]">
               <p className="text-[3rem]">No.</p>
               <p className="-translate-x-96 text-[3rem]">Nickname</p>
