@@ -103,7 +103,8 @@ export default function DataDashboard() {
     conventional: lead.conventional,
     bounty_o: lead.bounty_o,
     bounty_c: lead.bounty_c,
-    title: lead.title
+    title: lead.title,
+    campus: lead.campus
   }));
   const topThree = leaderboardData.slice(0, 3);
   const restOfLeaderboard = leaderboardData.slice(3, 9);
@@ -136,17 +137,18 @@ export default function DataDashboard() {
       </div>
       <div className="flex w-full items-start justify-center mx-auto">
         <div className="w-full overflow-hidden">
-          <div className="items-center justify-center px-4 flex">
+          <div className="items-center justify-between px-8 flex pt-14">
             <Image
               src="/UIU-white.png"
               alt="UNITAR"
               width={1000}
               height={1000}
-              className="w-fit h-48 pt-14 object-cover"
+              className="w-fit h-32 object-cover"
             />
-            <h1 className="text-2xl tracking-wider font-serif text-gray-900 dark:text-white sr-only">
+            <p className="text-6xl font-serif italic">Leaderboard</p>
+            {/*  <h1 className="text-2xl tracking-wider font-serif text-gray-900 dark:text-white sr-only">
               UNITAR
-            </h1>
+            </h1> */}
           </div>
           <div className="w-full py-20 px-52 flex flex-col items-center justify-center text-white text-center gap-2 bg-gradient-to-b from-[#0f1c3a] via-[#273e75] to-[#152852] ">
             <Image
@@ -161,7 +163,7 @@ export default function DataDashboard() {
               <span className="font-bold  text-yellow-400">Perodua Myvi!</span>
             </p>
           </div>
-
+          {/* Top Three Section */}
           <div className="relative flex flex-col items-center justify-center space-y-4 -translate-x-12">
             <div className="grid grid-cols-3  w-full items-end justify-around px-20">
               {/* Second Place */}
@@ -183,6 +185,9 @@ export default function DataDashboard() {
                 </span>
                 <span className="text-[4rem] text-gray-500 dark:text-gray-200">
                   RM {topThree[1]?.total_bounty.toLocaleString("en-US")}
+                </span>
+                <span className="text-[3rem] uppercase text-gray-500 dark:text-gray-200">
+                  {topThree[1]?.campus}
                 </span>
               </div>
 
@@ -206,6 +211,9 @@ export default function DataDashboard() {
                 <span className="-mt-4 text-[6rem] text-gray-500 dark:text-yellow-400 font-bold">
                   RM {topThree[0]?.total_bounty.toLocaleString("en-US")}
                 </span>
+                <span className="text-[3rem] uppercase text-gray-500 dark:text-gray-200">
+                  {topThree[0]?.campus}
+                </span>
               </div>
 
               {/* Third Place */}
@@ -228,14 +236,20 @@ export default function DataDashboard() {
                 <span className="text-[4rem] text-gray-500 dark:text-gray-200">
                   RM {topThree[2]?.total_bounty.toLocaleString("en-US")}
                 </span>
+                <span className="text-[3rem] uppercase text-gray-500 dark:text-gray-200">
+                  {topThree[2]?.campus}
+                </span>
               </div>
             </div>
           </div>
 
+          {/* Rest of Leaderboard Section */}
           <ScrollArea className="min-h-[30rem] px-32 py-18 pb-4">
             <div className="flex flex-row items-center justify-between px-4 py-14 text-xs italic text-gray-300 text-[3rem]">
               <p className="text-[3rem]">No.</p>
-              <p className="-translate-x-96 text-[3rem]">Nickname</p>
+              <p className="-translate-x-[270px] text-[3rem]">
+                Nickname - Campus
+              </p>
               <p className="text-[3rem]">Bounty*</p>
             </div>
             <div className="space-y-14 text-[4rem]">
@@ -265,7 +279,7 @@ export default function DataDashboard() {
                         className={`text-[4rem] tracking-wide rounded-sm text-blue-100 uppercase font-bold`}
                       >
                         {" "}
-                        {entry.nickname}
+                        {entry.nickname} - {entry.campus}
                       </span>
                       <span
                         className={`-mt-4 text-[3rem] text-gray-500 dark:text-gray-300 italic`}
