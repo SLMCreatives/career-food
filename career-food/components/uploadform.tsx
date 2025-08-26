@@ -17,6 +17,7 @@ type sgsLeaders = {
   conventional: number;
   bounty_o: number;
   bounty_c: number;
+  campus: string;
 };
 
 export default function UploadForm() {

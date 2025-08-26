@@ -21,6 +21,7 @@ type sgsLeaders = {
     w3: number;
     w4: number;
   };
+  campus: string;
 };
 
 export default function HomePage() {
