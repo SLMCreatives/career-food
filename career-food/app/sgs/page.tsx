@@ -187,7 +187,7 @@ export default function DataDashboard() {
                   RM {topThree[1]?.total_bounty.toLocaleString("en-US")}
                 </span>
                 <span className="text-[2.5rem] uppercase text-gray-500 dark:text-gray-200">
-                  Campus {topThree[1]?.campus}
+                  {topThree[1]?.campus} Campus
                 </span>
               </div>
 
@@ -212,7 +212,7 @@ export default function DataDashboard() {
                   RM {topThree[0]?.total_bounty.toLocaleString("en-US")}
                 </span>
                 <span className="text-[2.5rem] uppercase text-gray-500 dark:text-gray-200">
-                  Campus {topThree[0]?.campus}
+                  {topThree[0]?.campus} Campus
                 </span>
               </div>
 
@@ -237,7 +237,7 @@ export default function DataDashboard() {
                   RM {topThree[2]?.total_bounty.toLocaleString("en-US")}
                 </span>
                 <span className="text-[2.5rem] uppercase text-gray-500 dark:text-gray-200">
-                  Campus {topThree[2]?.campus}
+                  {topThree[2]?.campus} Campus
                 </span>
               </div>
             </div>
@@ -281,7 +281,7 @@ export default function DataDashboard() {
                         {" "}
                         {entry.nickname}{" "}
                         <span className="text-[2.5rem] font-normal">
-                          Campus {entry.campus}{" "}
+                          {entry.campus} Campus
                         </span>
                       </p>
                       <span
