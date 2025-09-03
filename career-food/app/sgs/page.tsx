@@ -107,7 +107,7 @@ export default function DataDashboard() {
     campus: lead.campus
   }));
   const topThree = leaderboardData.slice(0, 3);
-  const restOfLeaderboard = leaderboardData.slice(3, 9);
+  const restOfLeaderboard = leaderboardData.slice(3, 10);
 
   console.log(
     restOfLeaderboard.map((entry) => ({
@@ -156,7 +156,7 @@ export default function DataDashboard() {
               alt="SGS Leaderboard"
               width={3000}
               height={1000}
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain -mt-32"
             />
             <p className="text-[4.5rem] font-thin italic">
               Stand A Chance To Win A{" "}
@@ -186,8 +186,8 @@ export default function DataDashboard() {
                 <span className="text-[4rem] text-gray-500 dark:text-gray-200">
                   RM {topThree[1]?.total_bounty.toLocaleString("en-US")}
                 </span>
-                <span className="text-[3rem] uppercase text-gray-500 dark:text-gray-200">
-                  {topThree[1]?.campus}
+                <span className="text-[2.5rem] uppercase text-gray-500 dark:text-gray-200">
+                  Campus {topThree[1]?.campus}
                 </span>
               </div>
 
@@ -211,8 +211,8 @@ export default function DataDashboard() {
                 <span className="-mt-4 text-[6rem] text-gray-500 dark:text-yellow-400 font-bold">
                   RM {topThree[0]?.total_bounty.toLocaleString("en-US")}
                 </span>
-                <span className="text-[3rem] uppercase text-gray-500 dark:text-gray-200">
-                  {topThree[0]?.campus}
+                <span className="text-[2.5rem] uppercase text-gray-500 dark:text-gray-200">
+                  Campus {topThree[0]?.campus}
                 </span>
               </div>
 
@@ -236,27 +236,27 @@ export default function DataDashboard() {
                 <span className="text-[4rem] text-gray-500 dark:text-gray-200">
                   RM {topThree[2]?.total_bounty.toLocaleString("en-US")}
                 </span>
-                <span className="text-[3rem] uppercase text-gray-500 dark:text-gray-200">
-                  {topThree[2]?.campus}
+                <span className="text-[2.5rem] uppercase text-gray-500 dark:text-gray-200">
+                  Campus {topThree[2]?.campus}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Rest of Leaderboard Section */}
-          <ScrollArea className="min-h-[30rem] px-32 py-18 pb-4">
-            <div className="flex flex-row items-center justify-between px-4 py-14 text-xs italic text-gray-300 text-[3rem]">
-              <p className="text-[3rem]">No.</p>
-              <p className="-translate-x-[270px] text-[3rem]">
-                Nickname - Campus
+          <ScrollArea className="min-h-[30rem] px-32 py-18 py-4 pt-8">
+            <div className="flex flex-row items-center justify-between px-4 py-10 text-xs italic text-gray-300 text-[3rem]">
+              <p className="text-[2rem]">No.</p>
+              <p className="-translate-x-[380px] text-[2rem] uppercase">
+                Nickname <span className="text-[2rem]">campus</span>
               </p>
-              <p className="text-[3rem]">Bounty*</p>
+              <p className="text-[2rem]">Bounty*</p>
             </div>
             <div className="space-y-14 text-[4rem]">
               {restOfLeaderboard.map((entry, index) => (
                 <div
                   key={index}
-                  className={`flex items-center justify-between rounded-[2rem] p-10 py-2 border-2 border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f]`}
+                  className={`flex items-center justify-between rounded-[2rem] p-10 py-1 border-2 border-sky-200 shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_15px_#08f]`}
                 >
                   <div className="flex items-center space-x-20 relative">
                     <span
@@ -275,12 +275,15 @@ export default function DataDashboard() {
                       />
                     </div>
                     <div className="flex flex-col gap-0 pl-60">
-                      <span
+                      <p
                         className={`text-[4rem] tracking-wide rounded-sm text-blue-100 uppercase font-bold`}
                       >
                         {" "}
-                        {entry.nickname} - {entry.campus}
-                      </span>
+                        {entry.nickname}{" "}
+                        <span className="text-[2.5rem] font-normal">
+                          Campus {entry.campus}{" "}
+                        </span>
+                      </p>
                       <span
                         className={`-mt-4 text-[3rem] text-gray-500 dark:text-gray-300 italic`}
                       >
@@ -301,7 +304,7 @@ export default function DataDashboard() {
         </div>
       </div>
       <div className="flex flex-row w-full items-start justify-center text-balance mx-auto px-32 gap-20">
-        <p className="text-[3rem] italic text-gray-500 dark:text-gray-300">
+        <p className="text-[2.5rem] italic text-gray-500 dark:text-gray-300">
           *Bounty shown are estimated count and does not reflect the actual
           incentive amount. Please scan the QR code to view the{" "}
           <span className="text-blue-400">terms and conditions</span> for more
@@ -312,7 +315,7 @@ export default function DataDashboard() {
           alt="QR Code for Terms and Conditions"
           width={1000}
           height={1000}
-          className="w-64 h-64 object-cover rounded-lg shadow-lg"
+          className="w-60 h-60 object-cover rounded-lg shadow-lg"
         />
       </div>
       <div className="flex flex-row items-center justify-between space-x-2 mx-auto px-32">
